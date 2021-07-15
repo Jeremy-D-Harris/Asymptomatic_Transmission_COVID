@@ -5,7 +5,7 @@
 % the project is located. So, write: '/XX/Asymptomatic_Spread_COVID19'
 % where XX is location of the project
 
-main_path = '/Users/jharris387/Dropbox (Personal)/asymptomatic_spread_clean1/';
+main_path = '/XX/Asymptomatic_Spread_COVID19/';
 
 folder_package = [main_path,'Code_plt_ms_figures'];
 addpath(genpath(folder_package));
