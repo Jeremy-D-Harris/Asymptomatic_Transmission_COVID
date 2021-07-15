@@ -32,9 +32,9 @@ Within each of these folders, you'll find main files that simulate and parametri
 - **Code_plt_ms_figures:**
  Read in the data and plot the figures in the manuscript: Figures 1-3 and Supp Figures 1-2, 4, 6, 8, 9-10, 13. If saved, the figures will save to the folder 'Figures_ms_all.' From here, they are uploaded to the Overleaf document.
 
-- **Data** Folder containing data shown and used:
-(1) 'agedependent_data.xlsx' includes estimates from Davies et al., age distribution of Wuhan, and contact matrix from Wuhan (taken from Zhang et al.). (Used to parametrise age-dependent SEIR model.)
-(2) 'MMWR_Boehmeretal_medianages_4USregions_MayAug2020.xlsx' includes median age data from MMWR Boehmer et al. (2020)
+- **Data** Folder containing data shown and used: <br>
+(1) 'agedependent_data.xlsx' includes estimates from Davies et al., age distribution of Wuhan, and contact matrix from Wuhan (taken from Zhang et al.). (Used to parametrise age-dependent SEIR model.) <br>
+(2) 'MMWR_Boehmeretal_medianages_4USregions_MayAug2020.xlsx' includes median age data from MMWR Boehmer et al. (2020) <br>
 (3) 'Provisional_COVID19_DeathCounts_by_Sex_Age_and_Week.csv' includes CDC provisional end of week death counts from
 COVID-19 US 2020
 
