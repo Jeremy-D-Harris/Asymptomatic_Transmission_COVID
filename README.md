@@ -4,9 +4,9 @@ Jeremy Harris and Sang Woo Park and collaborators, July 2021
  -- updated 07/15/21 by jdh --
 
 **Code for:** JD Harris and SW Park et al. "Differences in time scales coupled with assortative mixing can lead to changes in the proportion of asymptomatic transmission and incidence over time." This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission: <br>
-(1) fixing proportion of asymptomatic incidence (no assortative mixing); <br>
-(2) assortative mixing based on infection type, either asymptomatic or symptomatic; <br>
-(3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.
+  (1) fixing proportion of asymptomatic incidence (no assortative mixing); <br>
+  (2) assortative mixing based on infection type, either asymptomatic or symptomatic; <br>
+  (3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.
 
 A preprint of the manuscript can be found on BioRxiv: [link](XXX) -- not yet!!
 
