@@ -1,7 +1,7 @@
 # Impact of time scales on proportion of asymptomatic transmission and incidence
 Jeremy Harris and Sang Woo Park and collaborators, July 2021
 
- ** updated 07/13/21 by jdh **
+ -- updated 07/13/21 by jdh --
 
 **Code for:** JD Harris and SW Park et al. "Differences in time scales coupled with assortative mixing can lead to changes in the proportion of asymptomatic transmission and incidence over time." This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission:
 (1) fixing proportion of asymptomatic incidence (no assortative mixing);
