@@ -18,7 +18,7 @@ Once the project is downloaded, navigate to the subdirectory 'Code_sims' to prod
 
 **Folder descriptions:**
 Folders are
-- **Code_sims:** All code to produce figures: subfolders organized by model with models (1)-(3) described above: <br>
+- **Code_sims:** All code to produce figures; subfolders organized by model with models (1)-(3) described above: <br>
   (1) 'fixedpropasymp_code' <br>
   (2) 'assortmixing_code' <br>
   (3) 'agedep_code'
