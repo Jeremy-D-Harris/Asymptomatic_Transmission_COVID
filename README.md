@@ -10,7 +10,7 @@ Jeremy Harris and Sang Woo Park and collaborators, July 2021
 
 A preprint of the manuscript can be found on BioRxiv: [link](XXX) -- not yet!!
 
-This code is archived on Zenodo: [![DOI](XXX) -- not yet!!
+This code is archived on Zenodo: [DOI](XXX) -- not yet!!
 
 **Instructions:** With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID19
 
