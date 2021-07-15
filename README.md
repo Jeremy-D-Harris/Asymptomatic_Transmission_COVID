@@ -14,7 +14,7 @@ This code is archived on Zenodo: [DOI](XXX) -- not yet!!
 
 **Instructions:** With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID19
 
-Once the project is downloaded, open the function 'path_setup.m' and modify the main path ('main_path' variable), directory where you downloaded the project to. Then navigate to the subdirectory 'Code_sims' to produce the simulation data. Once you produce the simulation, you can plot the figures in the manuscript by running the appropriate function in 'Code_plt_ms_figures.' See below for subfolder descriptions.
+Once the project is downloaded, navigate to the subdirectory 'Code_sims' to produce the simulation data. Once you produce the simulation, you can plot the figures in the manuscript by running the appropriate function in 'Code_plt_ms_figures.' See below for subfolder descriptions. -- actually you should be able to plot figures, since simulation data is already produced.
 
 - **Code_sims:** All code to produce the figures: three subfolder with one for each of the models: <br>
 (1) 'fixedpropasymp_code' <br>
