@@ -16,10 +16,11 @@ This code is archived on Zenodo: [![DOI](XXX) -- not yet!!
 
 Once the project is downloaded, open the function 'path_setup.m' and modify the main path ('main_path' variable), directory where you downloaded the project to. Then navigate to the subdirectory 'Code_sims' to produce the simulation data. Once you produce the simulation, you can plot the figures in the manuscript by running the appropriate function in 'Code_plt_ms_figures.' See below for subfolder descriptions.
 
-- **Code_sims:** All code to produce the figures: three subfolder with one for each of the models:
-(1) 'fixedpropasymp_code' \\
-(2) 'assortmixing_code' \\
-(3) 'agedep_code' \\
+- **Code_sims:** All code to produce the figures: three subfolder with one for each of the models: <br>
+(1) 'fixedpropasymp_code' <br>
+(2) 'assortmixing_code' <br>
+(3) 'agedep_code'
+
 Within each of these folders, you'll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in 'main_sim_assortmixing_SEIR_twodiseases_sameR0s_update071321.m' the the first choice for the user is to save the simulation data using the variable save_ans: 0 means don't save and 1 means save. The output file will be saved to the directory 'Code_plt_ms_figures/sim_data/' so that the corresponding figure can be produced.
 
 **Folder descriptions:** Folders are organized by model with models (1)-(3) described above.
