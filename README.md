@@ -1,25 +1,25 @@
 # Impact of time scales on proportion of asymptomatic transmission and incidence
 Jeremy Harris and Sang Woo Park and collaborators, July 2021
 
- %% updated 07/13/21 by jdh %%
+ ** updated 07/13/21 by jdh **
 
 **Code for:** JD Harris and SW Park et al. "Differences in time scales coupled with assortative mixing can lead to changes in the proportion of asymptomatic transmission and incidence over time." This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission:
 (1) fixing proportion of asymptomatic incidence (no assortative mixing);
 (2) assortative mixing based on infection type, either asymptomatic or symptomatic;
 (3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.
 
-A preprint of the manuscript can be found on BioRxiv: [link](XXX)
+A preprint of the manuscript can be found on BioRxiv: [link](XXX) -- not yet!!
 
-This code is archived on Zenodo: [![DOI](XXX)
+This code is archived on Zenodo: [![DOI](XXX) -- not yet!!
 
-**Instructions:** With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at https://github.com/Jeremy-D-Harris/XXX
+**Instructions:** With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID19
 
 Once the project is downloaded, open the function 'path_setup.m' and modify the main path ('main_path' variable), directory where you downloaded the project to. Then navigate to the subdirectory 'Code_sims' to produce the simulation data. Once you produce the simulation, you can plot the figures in the manuscript by running the appropriate function in 'Code_plt_ms_figures.' See below for subfolder descriptions.
 
 - **Code_sims:** All code to produce the figures: three subfolder with one for each of the models:
-(1) 'fixedpropasymp_code'
-(2) 'assortmixing_code'
-(3) 'agedep_code'
+(1) 'fixedpropasymp_code' \\
+(2) 'assortmixing_code' \\
+(3) 'agedep_code' \\
 Within each of these folders, you'll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in 'main_sim_assortmixing_SEIR_twodiseases_sameR0s_update071321.m' the the first choice for the user is to save the simulation data using the variable save_ans: 0 means don't save and 1 means save. The output file will be saved to the directory 'Code_plt_ms_figures/sim_data/' so that the corresponding figure can be produced.
 
 **Folder descriptions:** Folders are organized by model with models (1)-(3) described above.
