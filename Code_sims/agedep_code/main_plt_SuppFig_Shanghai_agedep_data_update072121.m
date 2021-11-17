@@ -1,9 +1,9 @@
-ou % function void = main_plt_agedep_data_update070121(void)
+% function void = main_plt_agedep_data_update070121(void)
 
 % code to plot age-dependent data:
 % (A) contact matrix,
 % (B) susceptibility/symptomaticity estimates,
-% (C) Age distribution of Wuhan population
+% (C) Age distribution of Shanghai population
 
 %% clear and load data
 clear all; close all; clc;
@@ -15,29 +15,29 @@ save_fig_ans = 0;
 % 1: save
 
 if save_fig_ans==1
-    figure_name = 'FigS12_agedep_data_071321';
+    figure_name = 'FigS12_agedep_data_Shanghai_072121';
 end
 
 %% load age-dependent data
-load('agedep_data_update071321.mat');
-% age distribution of Wuhan (2016)
+load('agedep_data_Shanghai_update071521.mat');
+% age distribution of Shanghai (2016)
 % age groups are
 %  1     2      3      4      5      6      7      8
 % 0-9, 10-19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79
-age_group_numbers = data_Wuhan_Davies.age_group_numbers;
+age_group_numbers = data_Shanghai_Davies.age_group_numbers;
 age_group_numbers_plus9 = [age_group_numbers;9];
 
-susceptibility_infection= data_Wuhan_Davies.susc_infection;
-probability_sympomatic= data_Wuhan_Davies.prob_symp;
-contact_matrix = data_Wuhan_Davies.contact_matrix;
+susceptibility_infection= data_Shanghai_Davies.susc_infection;
+probability_sympomatic= data_Shanghai_Davies.prob_symp;
+contact_matrix = data_Shanghai_Davies.contact_matrix;
 
 % age distribution as proportions
-age_distribution = data_Wuhan_Davies.age_distribution/(sum(data_Wuhan_Davies.age_distribution));
+age_distribution = data_Shanghai_Davies.age_distribution/(sum(data_Shanghai_Davies.age_distribution));
 
 f1=figure(1);
 set(gcf,'Position',[1250 400 1250 350]);
 
-%% contact matrix, Wuhan baseline estimates
+%% contact matrix, Shanghai baseline estimates
 figure(1); subplot(1,3,1);
 
 % x variable: goes down the rows
@@ -46,11 +46,11 @@ figure(1); subplot(1,3,1);
 s1 = pcolor(age_group_numbers_plus9,age_group_numbers_plus9,contact_matrix); hold on;
 %     axis([1 9 1 9])
 set(s1, 'EdgeColor', 'none');
-caxis(gca,[0,5]);
+caxis(gca,[0,10]);
 % shading interp
 cb1 = colorbar;
 set(get(cb1,'title'),'string','# contacts per day');
-cb1.Limits = [0 4];
+cb1.Limits = [0 10];
 
 cv2 = [2 2 135]/255;
 cv1 = [230 230 255]/255;
@@ -131,7 +131,7 @@ text(0.025,1.05,txt,'Units','normalized','FontSize',16,'FontWeight','bold');
 
 
 
-%% population age distribution of Wuhan (2016)
+%% population age distribution of Shanghai (2016)
 figure(1); subplot(1,3,3);
 % bar(age_group_numbers, prob_symp_age); hold on;
 bar(age_group_numbers, age_distribution); hold on;
@@ -169,11 +169,11 @@ if save_fig_ans==1
 end
 
 if 0
-    %% also plot original contact matrix - Wuhan baseline
+    %% also plot original contact matrix - Shanghai baseline
     
     % pad with zeros
     contact_matrix_original = zeros(15,15);
-    contact_matrix_original(1:14,1:14)=data_Wuhan_Davies.contact_matrix_original;
+    contact_matrix_original(1:14,1:14)=data_Shanghai_Davies.contact_matrix_original;
     
     figure(2);
     % x variable: goes down the rows

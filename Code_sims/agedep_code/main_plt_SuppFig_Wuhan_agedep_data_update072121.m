@@ -1,4 +1,4 @@
-ou % function void = main_plt_agedep_data_update070121(void)
+% function void = main_plt_agedep_data_update070121(void)
 
 % code to plot age-dependent data:
 % (A) contact matrix,
@@ -15,7 +15,7 @@ save_fig_ans = 0;
 % 1: save
 
 if save_fig_ans==1
-    figure_name = 'FigS12_agedep_data_071321';
+    figure_name = 'FigS14_Wuhan_agedep_data_072121';
 end
 
 %% load age-dependent data
