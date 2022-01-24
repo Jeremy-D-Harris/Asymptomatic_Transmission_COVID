@@ -51,9 +51,9 @@ if which_timescales==1
     t_end_burnin = 71.79;
     
     if with_mitigation==0
-        filename = 'SEIR_assortmixing_twodiseases_sameR0s_071321_T5and5.mat';
+        filename = 'SEIR_assortmixing_twodiseases_sameR0s_0171722_T5and5.mat';
     else
-        filename = 'SEIR_assortmixing_twodiseases_sameR0s_071321_T5and5_mit.mat';
+        filename = 'SEIR_assortmixing_twodiseases_sameR0s_0171722_T5and5_mit.mat';
     end
     
 elseif which_timescales==2
@@ -77,9 +77,9 @@ elseif which_timescales==2
     
     
     if with_mitigation==0
-        filename = 'SEIR_assortmixing_twodiseases_sameR0s_071321_T5and8.mat';
+        filename = 'SEIR_assortmixing_twodiseases_sameR0s_0171722_T5and8.mat';
     else
-        filename = 'SEIR_assortmixing_twodiseases_sameR0s_071321_T5and8_mit.mat';
+        filename = 'SEIR_assortmixing_twodiseases_sameR0s_0171722_T5and8_mit.mat';
     end
     
 end
@@ -91,7 +91,19 @@ end
 
 if with_mitigation==1
     
-    mitigation_level=1/10; % 1/10 baseline contact rates
+%     mitigation_level=1/10; % 1/10 baseline contact rates
+    % matching final R_t for each time scale
+    if which_timescales==1
+        
+        mitigation_level=0.121; % 
+        
+    else
+        
+        mitigation_level=0.0945; 
+                
+    end
+    
+    
     fprintf('With mitigation... \n\n');
     this_title = 'With mitigation';
     
@@ -117,7 +129,7 @@ params.gamma_e = gamma_e;
 
 % mitigation parameters
 params.t_m1 = 70;
-params.t_min = 10;
+params.t_min = 30;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
 
@@ -178,6 +190,7 @@ end
 
 % calculate the total incidence
 total_incidence = beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj);
+results.total_incidence=total_incidence;
 
 % calculate generation interval distribution
 g_a = @(t) gamma_e*gamma_a/(gamma_e-gamma_a)*(exp(-gamma_a*t)-exp(-gamma_e*t));
@@ -190,7 +203,8 @@ GI_distribution_symptomatic = feval(g_s,params.t_span);
 %%
 f1 = figure(1); set(f1, 'Position', [400 250 450 850]);
 subplot(4,1,1);
-q = semilogy(params.t_span, results.I_tot,'Color',cbf_colors,'LineWidth',2); hold on;
+% q = semilogy(params.t_span, results.I_tot,'Color',cbf_colors,'LineWidth',2); hold on;
+q = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
 axis([0 params.t_span(end) 10^(-6) 1]);
 xlabel('Time (days)'); ylabel({'Fraction'; 'Infections'});
 title(this_title);
@@ -203,20 +217,6 @@ f1.FontWeight = 'normal';
 legend(q,{'All infections'},'FontWeight','normal','FontSize',11);
 legend boxoff
 
-% calculate the proportion of asymptomatic incidence
-asymp_incidence = p_aa*beta_a_traj.*(I_a_traj.*S_traj) + p_as*beta_s_traj.*(I_s_traj.*S_traj);
-proportion_asymp_incidence = asymp_incidence./total_incidence;
-results.proportion_asymp_incidence =proportion_asymp_incidence;
-
-figure(1); subplot(4,1,2);
-r(1) = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-% r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
-axis([0 params.t_span(end) 0 1]);
-xlabel('Time (days)'); ylabel({'Proportion'; 'Asymptomatic'; 'Incidence'});
-f1=gca;
-f1.LineWidth = 1;
-f1.FontSize = 14;
-f1.FontWeight = 'normal';
 
 % calculate the proportion of asymptomatic transmission
 total_transmission = beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj);
@@ -233,6 +233,24 @@ f1=gca;
 f1.LineWidth = 1;
 f1.FontSize = 14;
 f1.FontWeight = 'normal';
+
+
+
+% calculate the proportion of asymptomatic incidence
+asymp_incidence = p_aa*beta_a_traj.*(I_a_traj.*S_traj) + p_as*beta_s_traj.*(I_s_traj.*S_traj);
+proportion_asymp_incidence = asymp_incidence./total_incidence;
+results.proportion_asymp_incidence =proportion_asymp_incidence;
+
+figure(1); subplot(4,1,2);
+r(1) = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+% r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
+axis([0 params.t_span(end) 0 1]);
+xlabel('Time (days)'); ylabel({'Proportion'; 'Asymptomatic'; 'Incidence'});
+f1=gca;
+f1.LineWidth = 1;
+f1.FontSize = 14;
+f1.FontWeight = 'normal';
+
 
 
 

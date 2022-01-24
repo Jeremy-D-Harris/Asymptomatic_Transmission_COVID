@@ -91,7 +91,16 @@ end
 
 if with_mitigation==1
     
-    mitigation_level=1/10; % 1/10 baseline contact rates
+        % matching final R_t for each time scale
+    if which_timescales==1
+        
+        mitigation_level=0.121; % 
+        
+    else
+        
+        mitigation_level=0.0945; 
+                
+    end
     fprintf('With mitigation... \n\n');
     this_title = 'With mitigation';
     
@@ -178,6 +187,7 @@ end
 
 % calculate the total incidence
 total_incidence = beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj);
+results.total_incidence=total_incidence;
 
 % calculate generation interval distribution
 g_a = @(t) gamma_e*gamma_a/(gamma_e-gamma_a)*(exp(-gamma_a*t)-exp(-gamma_e*t));
