@@ -11,7 +11,7 @@ save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'Figure2_assortmixing_sameR0s_011722';
+figure_name = 'Figure2_assortmixing_sameR0s_012422';
 
 %% load no mitigation files
 
@@ -36,6 +36,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
             gamma_a1 = params.gamma_a;
+            p1 = params.p;
             
         case 2
             % WITH assortative mixing
@@ -44,6 +45,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [15,32,128]/255; % dark blue
             gamma_a2 = params.gamma_a;
+            p_aa2=params.p_aa; p_as2=params.p_as; 
             
         case 3
             % WITH assortative mixing
@@ -52,6 +54,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
             gamma_a3 = params.gamma_a;
+            p_aa3=params.p_aa; p_as3=params.p_as; 
             
     end
     
@@ -69,7 +72,7 @@ for counter=1:length(switch_over_var)
     f1 = figure(1); set(f1, 'Position', [100 500 800 650]);
     subplot(4,2,1);
     if counter==1
-        this_p = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         this_p = semilogy(params.t_span, results.total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -105,7 +108,7 @@ for counter=1:length(switch_over_var)
     
     figure(1); subplot(4,2,3);
     if counter==1
-        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         this_p=plot(params.t_span, results.proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -146,7 +149,7 @@ for counter=1:length(switch_over_var)
     
     figure(1); subplot(4,2,5);
     if counter==1
-        this_p = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
     else
         this_p = plot(params.t_span, results.proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
         this_p.Color(4) = 1-0.18*(4-counter);
@@ -186,7 +189,7 @@ for counter=1:length(switch_over_var)
     
     if counter==1
         semilogy(params.t_span,ones(size(params.t_span)),'k','LineWidth',0.5); hold on;
-        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
     else
         this_p=semilogy(params.t_span,results.Rt_assortmixing,'--','Color',cbf_colors,'LineWidth',2); hold on;
         this_p.Color(4) = 1-0.18*(4-counter);
@@ -242,6 +245,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
             gamma_a1 = params.gamma_a;
+            p1=params.p;
             
         case 2
             % WITH assortative mixing
@@ -250,6 +254,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [15,32,128]/255; % dark blue
             gamma_a2 = params.gamma_a;
+            p_aa2=params.p_aa; p_as2=params.p_as; 
             
         case 3
             % WITH assortative mixing
@@ -258,6 +263,7 @@ for counter=1:length(switch_over_var)
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
             gamma_a3 = params.gamma_a;
+            p_aa3=params.p_aa; p_as3=params.p_as; 
             
     end
     
@@ -276,7 +282,7 @@ for counter=1:length(switch_over_var)
     figure(1);
     subplot(4,2,2);
     if counter==1
-        h_leg(counter) = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',1); hold on;
+        h_leg(counter) = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         h_leg(counter) = semilogy(params.t_span, results.total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -314,9 +320,10 @@ for counter=1:length(switch_over_var)
     
     if counter==3
         
-        legend_char1 = ['$T_a = ', num2str(1/gamma_a1),'$'];
-        legend_char2 = ['$T_a = ', num2str(1/gamma_a2),'$'];
-        legend_char3 = ['$T_a = ', num2str(1/gamma_a3),'$'];
+        legend_char1 = ['$T_a = ', num2str(1/gamma_a1),'$, $p = ', num2str(p1,'%0.2f'), '$'];
+        legend_char2 = ['$T_a = ', num2str(1/gamma_a2),'$, $p_{a|a} = ', num2str(p_aa2,'%0.2f'), ', p_{a|s} = ', num2str(p_as2,'%0.2f'), '$'];
+        legend_char3 = ['$T_a = ', num2str(1/gamma_a3),'$, $p_{a|a} = ', num2str(p_aa3,'%0.2f'), ', p_{a|s} = ', num2str(p_as3,'%0.2f'), '$'];
+%         legend_char3 = ['$T_a = ', num2str(1/gamma_a3),'$'];
         legend(h_leg,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Location','NorthEast','FontSize',12);
         
         legend boxoff
@@ -324,7 +331,7 @@ for counter=1:length(switch_over_var)
     
     figure(1); subplot(4,2,4);
     if counter==1
-        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         this_p=plot(params.t_span, results.proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -365,7 +372,7 @@ for counter=1:length(switch_over_var)
     
     figure(1); subplot(4,2,6);
     if counter==1
-        this_p=plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p=plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         this_p=plot(params.t_span, results.proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -404,7 +411,7 @@ for counter=1:length(switch_over_var)
     figure(1); subplot(4,2,8);
     semilogy(params.t_span,ones(size(params.t_span)),'k','LineWidth',0.5); hold on;
     if counter==1
-        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',1); hold on;
+        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
         
     else
         this_p=semilogy(params.t_span,results.Rt_assortmixing,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -413,7 +420,7 @@ for counter=1:length(switch_over_var)
     
     
     axis([0 params.t_span(end) 0.1 10]);
-    %     xlabel('Time (days)');
+    xlabel('Time (days)');
     ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
