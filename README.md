@@ -1,4 +1,4 @@
-# Individual-level differences in symptomatic and asymptomatictransmission shape population-level dynamics of the SARS-CoV-2outbreak
+# Individual-level differences in symptomatic and asymptomatic transmission shape population-level dynamics of the SARS-CoV-2outbreak
 Jeremy Harris and Sang Woo Park and collaborators, January 2022
 
  -- updated 01/24/22 by jdh --
@@ -23,14 +23,14 @@ Folders are
   (2) 'assortmixing_code' <br>
   (3) 'agedep_code'
 
-Within each of these folders, you'll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in 'main_sim_assortmixing_SEIR_twodiseases_sameR0s_update011722.m' the the first choice for the user is to save the simulation data using the variable save_ans: 0 means don't save and 1 means save. The output file will be saved to the directory 'Code_plt_ms_figures/sim_data/' so that the corresponding figure can be produced.
+Within each of these folders, you'll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in 'main_sim_assortmixing_SEIR_twodiseases_sameR0s_update011722.m' the the first choice for the user is to save the simulation data using the variable 'save_ans': 0 means don't save and 1 means save. The output file will be saved to the directory 'Code_plt_ms_figures/sim_data/' so that the corresponding figure can be produced.
 
 - **Code_plt_ms_figures:**
  Read in the data from 'Code_plt_ms_figures/sim_data/' and plot the figures: Figures 1-3 and Supp Figures 2-5. If saved, the figures will save to the folder 'Figures_ms_all.' From here, they are uploaded to the Overleaf document.
 
 - **Manuscript_forCodeReview:** Folder where you can find the draft of the manuscript that corresponds to Figures in 'Figures_ms_all.'
 
-- **Figures_ms_all** Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-13.
+- **Figures_ms_all** Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-5.
 
 
 - **Data** Folder containing data shown and used: <br>
