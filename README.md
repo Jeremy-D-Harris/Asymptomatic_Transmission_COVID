@@ -3,7 +3,7 @@ Jeremy Harris and Sang Woo Park and collaborators, January 2022
 
  -- updated 01/24/22 by jdh --
 
-**Code for:** JD Harris and SW Park et al. "Individual-level differences in symptomatic and asymptomatictransmission shape population-level dynamics of the SARS-CoV-2outbreak" This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission: <br>
+**Code for:** JD Harris and SW Park et al. "Individual-level differences in symptomatic and asymptomatic transmission shape population-level dynamics of the SARS-CoV-2outbreak" This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission: <br>
   (1) fixing proportion of asymptomatic incidence (no assortative mixing); <br>
   (2) assortative mixing based on infection type, either asymptomatic or symptomatic; <br>
   (3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.
