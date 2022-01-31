@@ -167,21 +167,29 @@ pre code {
 </div>
 
 
-<div id="impact-of-time-scales-on-proportion-of-asymptomatic-transmission-and-incidence" class="section level1">
-<h1>Impact of time scales on proportion of asymptomatic transmission and incidence</h1>
-<p>Jeremy Harris and Sang Woo Park and collaborators, July 2021</p>
-<p>– updated 07/15/21 by jdh –</p>
-<p><strong>Code for:</strong> JD Harris and SW Park et al. “Differences in time scales coupled with assortative mixing can lead to changes in the proportion of asymptomatic transmission and incidence over time.” This repository contains all the Matlab codes for running the three SEIR-like models of asymptomatic transmission: <br> (1) fixing proportion of asymptomatic incidence (no assortative mixing); <br> (2) assortative mixing based on infection type, either asymptomatic or symptomatic; <br> (3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.</p>
+<div id="individual-level-differences-in-symptomatic-and-asymptomatic-transmission-shape-population-level-dynamics-of-the-sars-cov-2-outbreaks" class="section level1">
+<h1>Individual-level differences in symptomatic and asymptomatic transmission shape population-level dynamics of the SARS-CoV-2 outbreaks</h1>
+<p>Jeremy Harris and Sang Woo Park and collaborators, January 2022</p>
+<p>– updated 01/30/22 by jdh –</p>
+<p><strong>Code for:</strong> JD Harris, SW Park, J Dushoff, JS Weitz et al. “Individual-level differences in symptomatic and asymptomatic transmission shape population-level dynamics of the SARS-CoV-2 outbreaks” This repository contains all the Matlab codes for running the three SEIR models of asymptomatic transmission: <br> (1) fixing proportion of asymptomatic incidence (no assortative mixing); <br> (2) assortative mixing based on infection type, either asymptomatic or symptomatic; <br> (3) assortative mixing by age using estimates of contact rates, susceptibility, and clinical severity by age.</p>
 <p>A preprint of the manuscript can be found on BioRxiv: <a href="XXX">link</a> – not yet!!</p>
 <p>This code is archived on Zenodo: <a href="XXX">DOI</a> – not yet!!</p>
-<p><strong>Instructions:</strong> With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at <a href="https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID19" class="uri">https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID19</a></p>
+<p><strong>Instructions:</strong> With the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020), MATLAB was used to parametrise models, run simulations, and plot figures. To do these analyses, download the project at <a href="https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID.git" class="uri">https://github.com/Jeremy-D-Harris/Asymptomatic_Spread_COVID.git</a></p>
 <p>Once the project is downloaded, navigate to the subdirectory ‘Code_sims’ to produce the simulation data. Once you produce the simulation, you can plot the figures in the manuscript by running the appropriate function in ‘Code_plt_ms_figures.’ See below for subfolder descriptions. – actually you should be able to plot figures, since simulation data is already produced.</p>
-<p><strong>Folder descriptions:</strong> Folders are - <strong>Code_sims:</strong> All code to produce figures; subfolders organized by model with models (1)-(3) described above: <br> (1) ‘fixedpropasymp_code’ <br> (2) ‘assortmixing_code’ <br> (3) ‘agedep_code’</p>
-<p>Within each of these folders, you’ll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in ‘main_sim_assortmixing_SEIR_twodiseases_sameR0s_update071321.m’ the the first choice for the user is to save the simulation data using the variable save_ans: 0 means don’t save and 1 means save. The output file will be saved to the directory ‘Code_plt_ms_figures/sim_data/’ so that the corresponding figure can be produced.</p>
+<p><strong>Folder descriptions:</strong> <br></p>
 <ul>
+<li><strong>Code_sims:</strong> All code to produce figures; subfolders organized by model with models (1)-(3) described above: <br>
+<ol style="list-style-type: decimal">
+<li>‘fixedpropasymp_code’ <br></li>
+<li>‘assortmixing_code’ <br></li>
+<li>‘agedep_code’</li>
+</ol></li>
+</ul>
+<p>Within each of these folders, you’ll find main files that simulate and parametrise the model. There are several choices for the user at the top of main file scripts. For instance, in ‘main_sim_fixedpropasymp_SEIR_twodiseases_sameR0s_update011722.m’ the the first choice for the user is to save the simulation data using the variable ‘save_ans’: 0 means don’t save and 1 means save. The output file will be saved to the directory ‘Code_plt_ms_figures/sim_data/’ so that the corresponding figure can be produced.</p>
+<ul>
+<li><p><strong>Code_plt_ms_figures:</strong> Read in the data from ‘Code_plt_ms_figures/sim_data/’ and plot the figures: Figures 1-3 and Supp Figures 2-5. If saved, the figures will save to the folder ‘Figures_ms_all.’ From here, they were uploaded to the Overleaf document.</p></li>
 <li><p><strong>Manuscript_forCodeReview:</strong> Folder where you can find the draft of the manuscript that corresponds to Figures in ‘Figures_ms_all.’</p></li>
-<li><p><strong>Figures_ms_all</strong> Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-13.</p></li>
-<li><p><strong>Code_plt_ms_figures:</strong> Read in the data and plot the figures in the manuscript: Figures 1-3 and Supp Figures 1-2, 4, 6, 8, 9-10, 13. If saved, the figures will save to the folder ‘Figures_ms_all.’ From here, they are uploaded to the Overleaf document.</p></li>
+<li><p><strong>Figures_ms_all</strong> Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-5.</p></li>
 <li><p><strong>Data</strong> Folder containing data shown and used: <br></p>
 <ul>
 <li>‘agedependent_data.xlsx’ includes estimates from Davies et al., age distribution of Wuhan, and contact matrix from Wuhan (taken from Zhang et al.). (Used to parametrise age-dependent SEIR model.) <br></li>
