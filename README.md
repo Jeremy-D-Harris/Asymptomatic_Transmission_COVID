@@ -30,7 +30,7 @@ Within each of these folders, you'll find main files that simulate and parametri
 
 - **Manuscript_forCodeReview:** Folder where you can find the draft of the manuscript that corresponds to Figures in 'Figures_ms_all.'
 
-- **Figures_ms_all** Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-5.
+- **Figures_ms_all:** Figure files in the manuscript, including main Figures 1-3 and Supp Figures 1-5.
 
 
 - **Data** Folder containing data shown and used: <br>
