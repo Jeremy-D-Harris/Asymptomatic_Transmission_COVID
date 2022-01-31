@@ -11,7 +11,7 @@ save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'FigureS4_assortmixing_samebetas_012422';
+figure_name = 'FigureS4_assortmixing_samebetas_013022';
 
 %% load no mitigation files
 
@@ -156,7 +156,7 @@ for counter=1:length(switch_over_var)
     end
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
@@ -380,7 +380,7 @@ for counter=1:length(switch_over_var)
     end
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;

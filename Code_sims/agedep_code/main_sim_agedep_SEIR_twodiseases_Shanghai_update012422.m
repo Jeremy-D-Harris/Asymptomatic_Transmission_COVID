@@ -11,7 +11,7 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 0;
+with_mitigation = 1;
 % 0: no mitigation
 % 1: with mitigation
 
@@ -30,10 +30,10 @@ params.increased_assortativity_yesno=increased_assortativity_yesno;
 
 
 %% load age-dependent contacts
-load('agedep_data_update071321.mat');
+load('agedep_data_Shanghai_update071521.mat');
 % contact matrix: zhang et al. 2020, Table S8; NxN, N=12 --> compressed to N=8 in order to interface with age-distribution data
 % susceptibility and symptomaticity estimates: from Davies et al. 2020, Fig 4 overall
-% age distrubition of Wuhan: from Zhang et al. 2020, Table S2; originally derived from 2016 census
+% age distrubition of Shanghai: from Zhang et al. 2020, Table S2; originally derived from 2016 census
 
 
 %% set up colors and parameters
@@ -51,12 +51,12 @@ if which_timescales==1
     
     % set betas s.t. R0,a=R0,s are the same and r=0.14
     if increased_assortativity_yesno==0
-        beta_a = 0.1; beta_s = 0.062;
-        t_end_burnin = 154.34; % burn-in time
+        beta_a = 0.0110; beta_s = 0.11;
+        t_end_burnin = 159.4; % burn-in time
     else
         % 4 times assortativity
-        beta_a = 0.04; beta_s = 0.061;
-        t_end_burnin = 154.63; % burn-in time
+        beta_a = 0.03; beta_s = 0.026;
+        t_end_burnin = 160.54; % burn-in time
         
     end
     
@@ -65,15 +65,15 @@ if which_timescales==1
     if with_mitigation==0
         
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_071321_T5and5.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_071321_T5and5_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_ia.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_071321_T5and5_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_071321_T5and5_mit_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_mit_ia.mat';
         end
     end
     
@@ -84,29 +84,30 @@ elseif which_timescales==2
     % decay rates, days^-1
     gamma_a=1/8; gamma_s=1/5;
     
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
+    % set betas s.t. r=0.14
     if increased_assortativity_yesno==0
-        beta_a = 0.079; beta_s = 0.06;
-        t_end_burnin = 156.37; % burn-in time
+        beta_a = 0.01; beta_s = 0.1085;
+        t_end_burnin = 158.78; % burn-in time
     else
         % 4 times assortativity
-        beta_a = 0.0314; beta_s = 0.061;
-        t_end_burnin = 154; % burn-in time
+        beta_a = 0.0235; beta_s = 0.026;
+        %         beta_a = 0.05; beta_s = 0.078;
+        t_end_burnin =159.47; % burn-in time
         
     end
     
     
     if with_mitigation==0
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_071321_T5and8.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_071321_T5and8_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_ia.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_071321_T5and8_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_071321_T5and8_mit_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_mit_ia.mat';
         end
     end
     
@@ -116,16 +117,28 @@ end
 %% mitigation on or off
 
 if with_mitigation==1
-    
-    mitigation_level=1/10; % 1/5 baseline contact rates
-    
+
     if increased_assortativity_yesno==1
         fprintf('With mitigation, 4x assortativity... \n\n');
         this_title = 'With mitigation, 4x';
+        
+        if which_timescales==1
+            mitigation_level=0.22;
+        else
+            mitigation_level=0.179;
+        end
+        
     else
         
         fprintf('With mitigation, baseline assortativity... \n\n');
         this_title = 'With mitigation, no assort';
+        
+        if which_timescales==1
+            mitigation_level=0.133;
+        else
+            mitigation_level=0.1265;
+        end
+        
         
     end
     
@@ -147,22 +160,22 @@ end
 
 
 %% deal with the contact matrix, age distributions, etc.
-age_group_numbers = data_Wuhan_Davies.age_group_numbers;
+age_group_numbers = data_Shanghai_Davies.age_group_numbers;
 N = length(age_group_numbers); % 8 age groups
 
-% age distribution of Wuhan
-age_distribution = data_Wuhan_Davies.age_distribution;
+% age distribution of Shanghai
+age_distribution = data_Shanghai_Davies.age_distribution;
 params.age_distribution = age_distribution;
-N_total = sum(age_distribution); % total population of Wuhan
+N_total = sum(age_distribution); % total population of Shanghai
 
-% wuhan baseline contact matrix
-wuhan_contact_matrix = data_Wuhan_Davies.contact_matrix;
+% Shanghai baseline contact matrix
+Shanghai_contact_matrix = data_Shanghai_Davies.contact_matrix;
 
 % create a matrix of the diagonal elements
-diag_M = diag(diag(wuhan_contact_matrix(1:N,1:N)));
+diag_M = diag(diag(Shanghai_contact_matrix(1:N,1:N)));
 
 % create a matrix of the off-diagonal elements
-offdiag_M = wuhan_contact_matrix(1:N,1:N)-diag_M;
+offdiag_M = Shanghai_contact_matrix(1:N,1:N)-diag_M;
 
 % contact matrix
 if increased_assortativity_yesno==0
@@ -175,10 +188,10 @@ M = increase_assort_level*diag_M+offdiag_M;
 params.M = M;
 
 % posterior means based off of Table 4 - Davies et al. nature letters 2020
-susceptibility_byage= data_Wuhan_Davies.susc_infection;
+susceptibility_byage= data_Shanghai_Davies.susc_infection;
 
 % symptomatic probabiility by age
-probability_symptomatic_byage= data_Wuhan_Davies.prob_symp;
+probability_symptomatic_byage= data_Shanghai_Davies.prob_symp;
 
 params.sigma = susceptibility_byage;
 params.prob_symp = probability_symptomatic_byage;
@@ -206,7 +219,7 @@ params.gamma_e = gamma_e;
 
 % mitigation parameters
 params.t_m1 = 70;
-params.t_min = 5;
+params.t_min = 30;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
 
@@ -227,19 +240,19 @@ fprintf('R_0 =  %2.2f \n\n',R0_agedep);
 r_agedep = get_r_SEIR_agedep(params);
 results.r_agedep=r_agedep;
 fprintf('Exponential growth rate \n'); % want to be close to 25 days in
-fprintf('r =  %2.2f \n\n',r_agedep);
+fprintf('r =  %2.4f \n\n',r_agedep);
 
 
-perturb = 10^-10;
+perturb = 10^-11;
 if eigen_direction_agedep_popN(1)>0
-    init_conds = [age_distribution;zeros(6*N,1)] + perturb*(eigen_direction_agedep_popN)/norm(eigen_direction_agedep_popN);
+    init_conds = [age_distribution;zeros(6*N,1)] + perturb*(eigen_direction_agedep_popN)/norm(eigen_direction_agedep_popN)+perturb*ones(size(eigen_direction_agedep_popN));
 else
-    init_conds = [age_distribution;zeros(6*N,1)] - perturb*eigen_direction_agedep_popN/norm(eigen_direction_agedep_popN);
+    init_conds = [age_distribution;zeros(6*N,1)] - perturb*(eigen_direction_agedep_popN)/norm(eigen_direction_agedep_popN)+perturb*ones(size(eigen_direction_agedep_popN));
 end
 
 % pause;
 
-options = odeset('RelTol',1e-9,'AbsTol',1e-12);
+options = odeset('RelTol',1e-12,'AbsTol',1e-12);
 
 [t,y_burnin] = ode45(@(t,y)simulate_SEIR_agedep_twodiseases_popN(t,y,params), params.t_span, init_conds,options);
 
@@ -289,6 +302,7 @@ results.proportion_asymptomatic_incidence=proportion_asymptomatic_incidence;
 
 % total incidence as a fraction of the total population
 i_all_total_fraction = i_all_total/N_total;
+results.i_all_total_fraction=i_all_total_fraction;
 
 % get proportion asymptomatic transmission
 [transmission_a_byage,transmission_s_byage] = get_transmission_SEIR_agedep(params,y_traj);
@@ -319,9 +333,9 @@ GI_distribution_symptomatic = feval(g_s,params.t_span);
 f1 = figure(1); set(f1, 'Position', [400 250 450 850]);
 subplot(5,1,1);
 if increased_assortativity_yesno==0
-    semilogy(params.t_span, results.I_all_total_fraction,'Color',cbf_colors,'LineWidth',2); hold on;
+    semilogy(params.t_span, results.i_all_total_fraction,'Color',cbf_colors,'LineWidth',2); hold on;
 else
-    semilogy(params.t_span, results.I_all_total_fraction,'--','Color',cbf_colors,'LineWidth',2); hold on;
+    semilogy(params.t_span, results.i_all_total_fraction,'--','Color',cbf_colors,'LineWidth',2); hold on;
 end
 axis([0 params.t_span(end) 10^(-6) 1]);
 xlabel('Time (days)'); ylabel({'Fraction'; 'infections'});
@@ -336,6 +350,20 @@ f1.FontWeight = 'normal';
 
 figure(1); subplot(5,1,2);
 if increased_assortativity_yesno==0
+    plot(params.t_span, results.proportion_asymptomatic_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
+else
+    plot(params.t_span, results.proportion_asymptomatic_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
+end
+axis([0 params.t_span(end) 0 1]);
+xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'transmission'});
+f1=gca;
+f1.LineWidth = 1;
+f1.FontSize = 14;
+f1.FontWeight = 'normal';
+
+
+figure(1); subplot(5,1,3);
+if increased_assortativity_yesno==0
     plot(params.t_span, results.proportion_asymptomatic_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
 else
     plot(params.t_span, results.proportion_asymptomatic_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
@@ -348,18 +376,6 @@ f1.FontSize = 14;
 f1.FontWeight = 'normal';
 
 
-figure(1); subplot(5,1,3);
-if increased_assortativity_yesno==0
-    plot(params.t_span, results.proportion_asymptomatic_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
-else
-    plot(params.t_span, results.proportion_asymptomatic_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
-end
-axis([0 params.t_span(end) 0 1]);
-xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'transmission'});
-f1=gca;
-f1.LineWidth = 1;
-f1.FontSize = 14;
-f1.FontWeight = 'normal';
 
 
 %% average age over time
@@ -379,7 +395,7 @@ if increased_assortativity_yesno==0
 else
     plot(params.t_span, results.ave_age_i_all,'--','Color',cbf_colors,'LineWidth',2); hold on;
 end
-axis([0 params.t_span(end) 20 50]);
+axis([0 params.t_span(end) 30 45]);
 xlabel('Time (days)'); ylabel({'Average';'age infection'});
 f1=gca;
 f1.LineWidth = 1;
@@ -409,7 +425,7 @@ fprintf('%2.2f days \n\n',params.t_span(ind(1)));
 
 init_proportion_asymp_incidence = proportion_asymptomatic_incidence(1);
 fprintf('Initial proportion asymptomatic incidence: \n');
-fprintf('%2.2f \n\n',init_proportion_asymp_incidence);
+fprintf('%2.4f \n\n',init_proportion_asymp_incidence);
 
 % if you want also plot generation interval distribution
 if 0

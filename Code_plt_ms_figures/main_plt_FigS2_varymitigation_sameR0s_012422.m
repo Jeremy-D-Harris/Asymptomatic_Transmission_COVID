@@ -6,14 +6,14 @@
 clear all; close all; clc;
 
 %% save figure 1?
-save_ans_Fig = 1;
+save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
 frac_spacing = 0.74;
 frac_scaling = 0.2;
 
-figure_name = 'FigureS2_varymitigation_sameR0s_012422';
+figure_name = 'FigureS2_varymitigation_sameR0s_013022';
 
 f1 = figure(1); set(f1, 'Position', [100 500 800 650]);
 
@@ -73,7 +73,7 @@ for counter=1:3
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
     
-    title('Varying the Time that Infections Decay','FontSize',16);
+    title('Varying the Mitigation Onset Time','FontSize',16);
     
     if counter==3
         txt = {'A'};
@@ -144,7 +144,7 @@ for counter=1:3
     
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
@@ -266,7 +266,7 @@ for counter=1:3
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
     
-    title('Varying the Decay Rate of Infections','FontSize',16);
+    title('Varying the Mitigation Intensity','FontSize',16);
     
     if counter==3
         txt = {'E'};
@@ -336,7 +336,7 @@ for counter=1:3
     this_p.Color(4) = 1-0.18*(counter);
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;

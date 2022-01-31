@@ -6,11 +6,11 @@
 clear all; close all; clc;
 
 %% save figure?
-save_ans_Fig = 1;
+save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'FigureS3_fixedpropasymp_samebetas_011722';
+figure_name = 'FigureS3_fixedpropasymp_samebetas_013022';
 
 %% load no mitigation files
 
@@ -141,7 +141,7 @@ for counter=1:length(switch_over_Ta)
     
     axis([0 params.t_span(end) 0 1]);
 %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
@@ -339,7 +339,7 @@ if counter==3
     this_p.Color(4) = 1-0.18*(counter);
     axis([0 params.t_span(end) 0 1]);
 %     xlabel('Time (days)');
-    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p_r(t)$'},'Interpreter','Latex');
+    ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
