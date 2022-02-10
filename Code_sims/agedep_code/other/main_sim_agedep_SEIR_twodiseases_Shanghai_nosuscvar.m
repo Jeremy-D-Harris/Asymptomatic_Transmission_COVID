@@ -23,7 +23,7 @@ which_timescales = 2; % 1,2
 
 
 %% increased assortative mixing?
-increased_assortativity_yesno = 0; % 0,1
+increased_assortativity_yesno = 1; % 0,1
 params.increased_assortativity_yesno=increased_assortativity_yesno;
 % 0: regular assortative mixing by age
 % 1: 4x assortative mixing by age
@@ -51,29 +51,34 @@ if which_timescales==1
     
     % set betas s.t. R0,a=R0,s are the same and r=0.14
     if increased_assortativity_yesno==0
-        beta_a = 0.0110; beta_s = 0.11;
-        t_end_burnin = 159.4; % burn-in time
+%         beta_a = 0.005; beta_s = 0.12;
+        beta_a = 0.011; beta_s = 0.11;
+        t_end_burnin = 159.06; % burn-in time
+%         susc_allages = 0.76;
+        susc_allages = 0.785;
     else
         % 4 times assortativity
-        beta_a = 0.03; beta_s = 0.026;
-        t_end_burnin = 160.54; % burn-in time
-        
+%         beta_a = 0.018; beta_s = 0.06;
+        beta_a = 0.01795; beta_s = 0.06;
+        t_end_burnin = 164; % burn-in time
+        susc_allages = 0.45;
     end
+    
     
     
     % file names of simulations if saved
     if with_mitigation==0
         
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and5.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and5_ia.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and5_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and5_mit_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and5_mit_ia.mat';
         end
     end
     
@@ -86,28 +91,30 @@ elseif which_timescales==2
     
     % set betas s.t. r=0.14
     if increased_assortativity_yesno==0
-        beta_a = 0.01; beta_s = 0.1085;
-        t_end_burnin = 158.78; % burn-in time
+        beta_a = 0.01; beta_s = 0.1084;
+        t_end_burnin = 158.66; % burn-in time
+        susc_allages = 0.785;
+
     else
         % 4 times assortativity
-        beta_a = 0.0235; beta_s = 0.026;
+        beta_a = 0.016; beta_s = 0.068;
         %         beta_a = 0.05; beta_s = 0.078;
-        t_end_burnin =159.47; % burn-in time
-        
+        t_end_burnin =163.5; % burn-in time
+        susc_allages = 0.396;
     end
     
     
     if with_mitigation==0
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and8.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and8_ia.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and8_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_012422_Shanghai_T5and8_mit_ia.mat';
+            filename = 'SEIR_agedep_twodiseases_nosuscvar_Shanghai_T5and8_mit_ia.mat';
         end
     end
     
@@ -123,9 +130,9 @@ if with_mitigation==1
         this_title = 'With mitigation, 4x';
         
         if which_timescales==1
-            mitigation_level=0.22;
+            mitigation_level=0.2185;
         else
-            mitigation_level=0.179;
+            mitigation_level=0.19;
         end
         
     else
@@ -134,9 +141,9 @@ if with_mitigation==1
         this_title = 'With mitigation, no assort';
         
         if which_timescales==1
-            mitigation_level=0.133;
+            mitigation_level=0.126;
         else
-            mitigation_level=0.1265;
+            mitigation_level=0.116;
         end
         
         
@@ -188,7 +195,7 @@ M = increase_assort_level*diag_M+offdiag_M;
 params.M = M;
 
 % posterior means based off of Table 4 - Davies et al. nature letters 2020
-susceptibility_byage= data_Shanghai_Davies.susc_infection;
+susceptibility_byage= susc_allages*ones(size(data_Shanghai_Davies.susc_infection));
 
 % symptomatic probabiility by age
 probability_symptomatic_byage= data_Shanghai_Davies.prob_symp;
@@ -242,7 +249,7 @@ results.r_agedep=r_agedep;
 fprintf('Exponential growth rate \n'); % want to be close to 25 days in
 fprintf('r =  %2.4f \n\n',r_agedep);
 
-
+% pause;
 perturb = 10^-11;
 if eigen_direction_agedep_popN(1)>0
     init_conds = [age_distribution;zeros(6*N,1)] + perturb*(eigen_direction_agedep_popN)/norm(eigen_direction_agedep_popN)+perturb*ones(size(eigen_direction_agedep_popN));
@@ -495,6 +502,7 @@ if 0
     legend boxoff
 end
 
+Rt_agedep(end)
 
 %%
 % save simulated data
