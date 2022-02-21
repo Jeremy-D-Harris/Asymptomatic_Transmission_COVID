@@ -383,7 +383,7 @@ for counter=1:length(switch_over_var)
         
 %         legend_char1 = ['$T_s = T_a = ', num2str(1/gamma_a1),'$, Assortativity $+$ Symptomaticity'];
 %         legend_char2 = ['$T_s = ', num2str(1/gamma_s2),'$, $T_a = ', num2str(1/gamma_a2),'$, Assortativity $+$ Symptomaticity'];
-                legend_char1 = ['$T_s = T_a = ', num2str(1/gamma_a1),'$'];
+        legend_char1 = ['$T_s = T_a = ', num2str(1/gamma_a1),'$'];
         legend_char2 = ['$T_s = ', num2str(1/gamma_s2),'$, $T_a = ', num2str(1/gamma_a2),'$'];
         %         legend(this_h,{legend_char1,legend_char2,legend_char3,legend_char4}, 'Interpreter','Latex','Location','NorthEast','FontSize',11);
 %         legend(this_h,{legend_char1,legend_char2}, 'Interpreter','Latex','Position',[0.695 0.89 0.1 0.05],'FontSize',10.5);

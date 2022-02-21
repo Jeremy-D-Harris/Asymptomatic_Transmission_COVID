@@ -191,7 +191,8 @@ for counter=1:3
     this_p.Color(4) = 1-0.18*(counter-1); % transparency
     %     this_p.Color(4) = 0.64+0.18*(counter-1);
     
-    axis([0 params.t_span(end) 0.1 10]);
+    axis([0 params.t_span(end) 0.125 4]);
+    yticks([0.125 0.25 0.5 1 2 4]);
     xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
@@ -205,17 +206,17 @@ for counter=1:3
         figure(1); subplot(4,2,7);
         
         txt = {'D'};
-        text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
+        text(0.025,0.95,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
         
         set(f1,'Position',[old_pos(1), old_pos(2)-frac_scaling, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'yticklabel',[{'10^{-1}'},{'10^0'},{' '}]);
+        set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
         box('off');
         
-        txt = {'10^1'};
-        text(-0.11,0.93,txt,'Units','normalized',...
+        txt = {'4'};
+        text(-0.045,0.95,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
         
     end
@@ -390,8 +391,8 @@ for counter=1:3
     this_p.Color(4) = 1-0.18*(counter-1); % transparency
 %     this_p.Color(4) = 0.64+0.18*(counter-1);
     
-    axis([0 params.t_span(end) 0.1 10]);
-    xlabel('Time (days)');
+    axis([0 params.t_span(end) 0.1 4]);
+    yticks([0.125 0.25 0.5 1 2 4]);
     xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
@@ -401,16 +402,16 @@ for counter=1:3
     
     if counter==3
         txt = {'H'};
-        text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
+        text(0.025,0.95,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
         set(f1,'Position',[old_pos(1), old_pos(2)-frac_scaling, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'yticklabel',[{'10^{-1}'},{'10^0'},{' '}]);
+        set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
         box('off');
         
-        txt = {'10^1'};
-        text(-0.11,0.93,txt,'Units','normalized',...
+        txt = {'4'};
+        text(-0.045,0.95,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
     end
     

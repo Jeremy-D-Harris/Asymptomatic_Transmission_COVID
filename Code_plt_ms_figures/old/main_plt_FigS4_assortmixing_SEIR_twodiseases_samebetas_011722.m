@@ -1,79 +1,87 @@
 
-%% Figure 1
-% A-D: no mit, increase time-scale differences
-% E-H: with mit, increase time-scale differences
+
+%% Figure 2 - parametrised with R_0,a = R_0,s
+% A-D: no mitigation, increase time-scale differences
+% E-H: with mitigation, increase time-scale differences
 
 clear all; close all; clc;
 
-%% save figure 1?
+%% save figure?
 save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
+figure_name = 'FigureS4_assortmixing_samebetas_013022';
+
+%% load no mitigation files
+
+switch_over_var = [1,2,3];
+
 frac_spacing = 0.74;
 frac_scaling = 0.2;
 
-figure_name = 'FigureS2_varymitigation_sameR0s_013122';
+fprintf('No mitigation... \n\n');
 
-f1 = figure(1); set(f1, 'Position', [100 500 800 650]);
-
-%% A-D: vary time to mitigation
-
-for counter=1:3
+% A-D: no mitigation
+for counter=1:length(switch_over_var)
     
-    switch counter
+    this_file = switch_over_var(counter);
+    
+    switch this_file
         
         case 1
-            
-            
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit2_20days.mat';
-            load(strcat('./sim_data/',infile));
-            cbf_colors = [0 0 0]; % black
-            R_inf(1)=results.Rt_fixedpropasymp(end);
-            t_min(1)=results.t_min;
-            %             gamma_a1 = params.gamma_a;
-            
-            
-        case 2
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit2.mat';
+            % NO assortative mixing
+            % load: Ta=8 (Ts=5)
+            infile = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and8.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
-            R_inf(2)=results.Rt_fixedpropasymp(end);
-            t_min(2)=results.t_min;
-            %             gamma_a2 = params.gamma_a;
+            gamma_s1 = params.gamma_s;
+            gamma_a1 = params.gamma_a;
+            p1=params.p;
+            
+        case 2
+            % WITH assortative mixing
+            % load: Ta=5 (same),
+            infile = 'SEIR_assortmixing_twodiseases_samebetas_011722_T5and5.mat';
+            load(strcat('./sim_data/',infile));
+            cbf_colors = [15,32,128]/255; % dark blue
+            gamma_s2 = params.gamma_s;
+            gamma_a2 = params.gamma_a;
+            p_aa2=params.p_aa; p_as2=params.p_as; 
             
         case 3
-            
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit2_40days.mat';
+            % WITH assortative mixing
+            % load: Ta=8 (Ta=5)
+            infile = 'SEIR_assortmixing_twodiseases_samebetas_011722_T5and8.mat';
             load(strcat('./sim_data/',infile));
-            cbf_colors = [0.5 0.5 0.5]; % gray
-            R_inf(3)=results.Rt_fixedpropasymp(end);
-            t_min(3)=results.t_min;
-            %             gamma_a3 = params.gamma_a;
-            
-            
-            
-            
+            cbf_colors = [133,192,249]/255; % light blue
+            gamma_s3 = params.gamma_s;
+            gamma_a3 = params.gamma_a;
+            p_aa3=params.p_aa; p_as3=params.p_as; 
             
     end
     
     fprintf('Opened file: \n'); % want to be close to 25 days in
     fprintf(strcat(infile,'\n\n'));
     
+    fprintf('Infectious periods: \n');
+    fprintf('T_a = %1i days \n',1/params.gamma_a);
+    fprintf('T_s = %1i days \n\n',1/params.gamma_s);
+    fprintf('-------------------------------------- \n\n');
+    
     
     %% plot first column - no mitigation
     
     f1 = figure(1); set(f1, 'Position', [100 500 800 650]);
     subplot(4,2,1);
-    %     this_p = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_q(counter) = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_q(counter).Color(4) = 1-0.18*(counter-1); % transparency
-    %     this_q(counter).Color(4) = 0.64+0.18*(counter-1);
+    if counter==1
+        this_p = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p = semilogy(params.t_span, results.total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    end
     axis([0 params.t_span(end) 10^(-6) 1]);
-    
     %     xlabel('Time (days)');
     ylabel({'Total'; 'Incidence, $i(t)$'},'Interpreter','Latex');
     f1=gca;
@@ -82,7 +90,7 @@ for counter=1:3
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
     
-    title('Varying the Mitigation Onset Time','FontSize',16);
+    title('Susceptible Depletion','FontSize',16);
     
     if counter==3
         txt = {'A'};
@@ -100,22 +108,16 @@ for counter=1:3
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
     end
     
-    if counter==3
-        
-        legend_char1 = ['$T_{m} = ', num2str(t_min(1),'%2d'),'$ days'];
-        legend_char2 = ['$T_{m} = ', num2str(t_min(2),'%2d'),'$ days'];
-        legend_char3 = ['$T_{m} = ', num2str(t_min(3),'%2d'),'$ days'];
-        %     legend(this_h,{'1','2','3'}, 'Interpreter','Latex');
-        legend(this_q,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Location','NorthEast','FontSize',12);
-        legend boxoff
-        
+    
+    figure(1); subplot(4,2,3);
+    if counter==1
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
     end
     
-    figure(1);
-    subplot(4,2,3);
-    this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-    %     this_p.Color(4) = 0.64+0.18*(counter-1);
     
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
@@ -149,10 +151,13 @@ for counter=1:3
     
     
     figure(1); subplot(4,2,5);
-    this_p = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-    %     this_p.Color(4) = 0.64+0.18*(counter-1);
-    
+    if counter==1
+        this_p = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p = plot(params.t_span, results.proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    end
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
     ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
@@ -183,42 +188,42 @@ for counter=1:3
         
     end
     
-    figure(1); subplot(4,2,7);
-    %     plot(params.t_span,Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
-    semilogy(params.t_span,ones(size(params.t_span)),'k','LineWidth',0.5); hold on;
-    this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
-    R_inf(counter) = results.Rt_fixedpropasymp(end);
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-    %     this_p.Color(4) = 0.64+0.18*(counter-1);
     
-    axis([0 params.t_span(end) 0.125 4]);
-    yticks([0.125 0.25 0.5 1 2 4]);
-    xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
+    figure(1); subplot(4,2,7);
+    
+    if counter==1
+        semilogy(params.t_span,ones(size(params.t_span)),'k','LineWidth',0.5); hold on;
+        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p=semilogy(params.t_span,results.Rt_assortmixing,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    end
+    axis([0 params.t_span(end) 0.2 4]);
+    yticks([0.25 0.5 1 2 4]);
+    xlabel('Time (days)');
+    ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
-    %     this_p.Color(4) = 1-0.18*(counter);
+    
+    
     
     if counter==3
-        
-        figure(1); subplot(4,2,7);
-        
         txt = {'D'};
-        text(0.025,0.95,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
-        
+        text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
         set(f1,'Position',[old_pos(1), old_pos(2)-frac_scaling, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
         box('off');
         
         txt = {'4'};
         text(-0.045,0.95,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
-        
     end
     
 end
@@ -226,65 +231,84 @@ end
 
 
 
-%% E-H: vary decay rates
-for counter=1:3
+%% load no mitigation files
+
+fprintf('With mitigation... \n\n');
+
+% D-F: with mitigation
+for counter=1:length(switch_over_var)
     
-    switch counter
+    this_file = switch_over_var(counter);
+    
+    
+    
+    switch this_file
         
         case 1
-            
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit3.mat';
-            load(strcat('./sim_data/',infile));
-            cbf_colors = [0 0 0]; % black
-            R_inf(3)=results.Rt_fixedpropasymp(end);
-            %             gamma_a3 = params.gamma_a;
-            
-            
-            
-        case 2
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit2.mat';
+            % NO assortative mixing
+            % load: Ta=8 (Ts=5)
+            infile = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and8_mit.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
-            R_inf(2)=results.Rt_fixedpropasymp(end);
-            %             gamma_a2 = params.gamma_a;
+            gamma_s1 = params.gamma_s;
+            gamma_a1 = params.gamma_a;
+            p1=params.p;
+            
+        case 2
+            % WITH assortative mixing
+            % load: Ta=5 (same),
+            infile = 'SEIR_assortmixing_twodiseases_samebetas_011722_T5and5_mit.mat';
+            load(strcat('./sim_data/',infile));
+            cbf_colors = [15,32,128]/255; % dark blue
+            gamma_s2 = params.gamma_s;
+            gamma_a2 = params.gamma_a;
+            p_aa2=params.p_aa; p_as2=params.p_as; 
             
         case 3
-            
-            % load:
-            infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_012422_T5and8_mit1.mat';
+            % WITH assortative mixing
+            % load: Ta=8 (Ta=5)
+            infile = 'SEIR_assortmixing_twodiseases_samebetas_011722_T5and8_mit.mat';
             load(strcat('./sim_data/',infile));
-            cbf_colors = [0.5 0.5 0.5]; % gray
-            R_inf(1)=results.Rt_fixedpropasymp(end);
-            %             gamma_a1 = params.gamma_a;
-            
+            cbf_colors = [133,192,249]/255; % light blue
+            gamma_s3 = params.gamma_s;
+            gamma_a3 = params.gamma_a;
+            p_aa3=params.p_aa; p_as3=params.p_as; 
             
     end
+    
+    
     
     fprintf('Opened file: \n'); % want to be close to 25 days in
     fprintf(strcat(infile,'\n\n'));
     
+    fprintf('Infectious periods: \n');
+    fprintf('T_a = %1i days \n',1/params.gamma_a);
+    fprintf('T_s = %1i days \n\n',1/params.gamma_s);
+    fprintf('-------------------------------------- \n\n');
     
     %% plot second column - with mitigation
     
     figure(1);
     subplot(4,2,2);
-    this_h(counter) = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_h(counter).Color(4) = 1-0.18*(counter-1); % transparency
-    %     this_h(counter).Color(4) = 0.64+0.18*(counter-1); % transparency
+    if counter==1
+        h_leg(counter) = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+        h_leg(counter).Color(4) = 1-0.18*(3-counter); % transparency
+    else
+        h_leg(counter) = semilogy(params.t_span, results.total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        h_leg(counter).Color(4) = 1-0.18*(3-counter); % transparency
+    end
+    
     
     axis([0 params.t_span(end) 10^(-6) 1]);
     %     xlabel('Time (days)');
     ylabel({'Total'; 'Incidence, $i(t)$'},'Interpreter','Latex');
-    
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
     
-    title('Varying the Mitigation Intensity','FontSize',16);
+    title('Intervention','FontSize',16);
     
     if counter==3
         txt = {'E'};
@@ -302,20 +326,26 @@ for counter=1:3
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
     end
     
+    
     if counter==3
         
-        %     figure(1); subplot(4,2,2);
-        legend_char1 = ['$R_{\infty} = ', num2str(R_inf(3),'%2.2f'),'$'];
-        legend_char2 = ['$R_{\infty} = ', num2str(R_inf(2),'%2.2f'),'$'];
-        legend_char3 = ['$R_{\infty} = ', num2str(R_inf(1),'%2.2f'),'$'];
-        legend(this_h,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Location','NorthEast','FontSize',12);
+        legend_char1 = ['$T_s = ', num2str(1/gamma_s1),'$, $T_a = ', num2str(1/gamma_a1),'$, $p = ', num2str(p1,'%0.2f'), '$'];
+        legend_char2 = ['$T_s = T_a = ', num2str(1/gamma_a2),'$, $p_{a|a} = ', num2str(p_aa2,'%0.2f'), ', p_{a|s} = ', num2str(p_as2,'%0.2f'), '$ (or $p = ', num2str(p1,'%0.2f'),'$)'];
+        legend_char3 = ['$T_s = ', num2str(1/gamma_s3),'$, $T_a = ', num2str(1/gamma_a3),'$, $p_{a|a} = ', num2str(p_aa3,'%0.2f'), ', p_{a|s} = ', num2str(p_as3,'%0.2f'), '$'];
+%         legend(h_leg,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Location','NorthEast','FontSize',12);
+        legend(h_leg,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Position',[0.7 0.86 0.1 0.05],'FontSize',10);
         legend boxoff
     end
     
     figure(1); subplot(4,2,4);
-    this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-%     this_p.Color(4) = 0.64+0.18*(counter-1);
+    if counter==1
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p=plot(params.t_span, results.proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    end
+    %     this_p.Color(4) = 1-0.18*(counter);
     
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
@@ -325,7 +355,6 @@ for counter=1:3
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
-    
     
     
     if counter==3
@@ -349,11 +378,15 @@ for counter=1:3
     end
     
     
-    
     figure(1); subplot(4,2,6);
-    this_p=plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-%     this_p.Color(4) = 0.64+0.18*(counter-1);
+    if counter==1
+        this_p=plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p=plot(params.t_span, results.proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+        
+    end
     axis([0 params.t_span(end) 0 1]);
     %     xlabel('Time (days)');
     ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
@@ -362,7 +395,6 @@ for counter=1:3
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
-    
     
     if counter==3
         txt = {'G'};
@@ -386,14 +418,19 @@ for counter=1:3
     
     figure(1); subplot(4,2,8);
     semilogy(params.t_span,ones(size(params.t_span)),'k','LineWidth',0.5); hold on;
-    this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
-    R_inf(counter) = results.Rt_fixedpropasymp(end);
-    this_p.Color(4) = 1-0.18*(counter-1); % transparency
-%     this_p.Color(4) = 0.64+0.18*(counter-1);
+    if counter==1
+        this_p=semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    else
+        this_p=semilogy(params.t_span,results.Rt_assortmixing,'--','Color',cbf_colors,'LineWidth',2); hold on;
+        this_p.Color(4) = 1-0.18*(3-counter);
+    end
     
-    axis([0 params.t_span(end) 0.1 4]);
-    yticks([0.125 0.25 0.5 1 2 4]);
-    xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
+    
+    axis([0 params.t_span(end) 0.2 4]);
+    yticks([0.25 0.5 1 2 4]);
+    xlabel('Time (days)');
+    ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
@@ -402,12 +439,12 @@ for counter=1:3
     
     if counter==3
         txt = {'H'};
-        text(0.025,0.95,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
+        text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
         set(f1,'Position',[old_pos(1), old_pos(2)-frac_scaling, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
         box('off');
         
         txt = {'4'};
@@ -418,19 +455,21 @@ for counter=1:3
 end
 
 
-
-
 %% save figure
 if save_ans_Fig
     
-    folder_location = './../Figures_ms_all/supp/';
+    folder_location = '../Figures_ms_all/supp/';
     saveas(f1,strcat(folder_location,figure_name),'epsc');
     
-    fprintf('Figure saved:\n'); % want to be close to 25 days in
+    fprintf('Figure saved:\n');
     fprintf(strcat(figure_name,'\n\n'));
     
-    fprintf('Location:\n'); % want to be close to 25 days in
+    fprintf('Location:\n');
     fprintf(strcat(folder_location,'\n\n'));
+    
+else
+    
+    fprintf('Figure not saved.\n');
     
 end
 
