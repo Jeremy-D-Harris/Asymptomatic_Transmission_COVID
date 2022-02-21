@@ -5,7 +5,7 @@ clear all; close all; clc;
 
 
 %% want to save?
-save_ans = 0;
+save_ans = 1;
 % 0: don't save
 % 1: save
 
@@ -88,7 +88,7 @@ elseif which_timescales==2
     % same transmission rates
     this_beta = 0.0375;
     beta_a = this_beta; beta_s = this_beta;
-    t_end_burnin = 165.12; % burn-in time
+    t_end_burnin = 165.44; % burn-in time
     susc_allages = 1;
     
     
@@ -108,7 +108,7 @@ elseif which_timescales==2
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
         
-        mitigation_level=0.105;
+        mitigation_level=0.1057;
         
     end
     
