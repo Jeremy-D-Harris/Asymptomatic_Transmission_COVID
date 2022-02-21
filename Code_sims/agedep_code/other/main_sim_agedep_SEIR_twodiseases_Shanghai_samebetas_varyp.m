@@ -11,7 +11,7 @@ save_ans = 1;
 
 
 %% mitigation or not?
-with_mitigation = 1;
+with_mitigation = 0;
 % 0: no mitigation
 % 1: with mitigation
 
@@ -75,15 +75,15 @@ if which_timescales==1
     if with_mitigation==0
         
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and5.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and5.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and5_ia2.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and5_ia2.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and5_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and5_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and5_mit_ia2.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and5_mit_ia2.mat';
         end
     end
     
@@ -98,10 +98,10 @@ elseif which_timescales==2
     if increased_assortativity_yesno==0
         
 %         beta_a = 0.00785; beta_s = 0.0851;
-        beta_a = 0.0346; beta_s = 0.0446;
+%         beta_a = 0.0346; beta_s = 0.0446;
 %         this_beta = 0.0374;
-%         this_beta = 0.0375;
-%         beta_a = this_beta; beta_s = this_beta;
+        this_beta = 0.0375;
+        beta_a = this_beta; beta_s = this_beta;
         t_end_burnin = 165.12; % burn-in time
         susc_allages = 1;
 
@@ -116,15 +116,15 @@ elseif which_timescales==2
     
     if with_mitigation==0
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and8.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and8.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and8_ia2.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and8_ia2.mat';
         end
     else
         if increased_assortativity_yesno==0
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and8_mit.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and8_mit.mat';
         else
-            filename = 'SEIR_agedep_twodiseases_dbvp_Shanghai_T5and8_mit_ia2.mat';
+            filename = 'SEIR_agedep_twodiseases_sbvp_Shanghai_T5and8_mit_ia2.mat';
         end
     end
     
