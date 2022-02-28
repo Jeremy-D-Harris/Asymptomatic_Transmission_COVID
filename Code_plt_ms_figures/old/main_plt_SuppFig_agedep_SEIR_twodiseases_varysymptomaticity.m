@@ -256,7 +256,7 @@ for counter=1:length(switch_over_var)
     if counter==2
         semilogy(params.t_span(1:20:end),ones(size(params.t_span(1:20:end))),'k','LineWidth',0.5); hold on;
     end
-    axis([0 params.t_span(end) 0.25 4]);
+    axis([0 params.t_span(end) 0.2 4]);
     yticks([0.25 0.5 1 2 4]);
     xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
@@ -274,6 +274,7 @@ for counter=1:length(switch_over_var)
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');
         box('off');
         
         txt = {'4'};
@@ -540,7 +541,7 @@ for counter=1:length(switch_over_var)
         
     end
     
-    axis([0 params.t_span(end) 0.25 4]);
+    axis([0 params.t_span(end) 0.2 4]);
     yticks([0.25 0.5 1 2 4]);
     xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
@@ -559,6 +560,7 @@ for counter=1:length(switch_over_var)
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');
         box('off');
         
         txt = {'4'};

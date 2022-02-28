@@ -11,7 +11,7 @@ save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'FigureS4_assortmixing_samebetas_013022';
+figure_name = 'FigureS4_correlations_samebetas_022122';
 
 %% load no mitigation files
 
@@ -219,6 +219,7 @@ for counter=1:length(switch_over_var)
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');  
         box('off');
         
         txt = {'4'};
@@ -445,6 +446,7 @@ for counter=1:length(switch_over_var)
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');
         box('off');
         
         txt = {'4'};

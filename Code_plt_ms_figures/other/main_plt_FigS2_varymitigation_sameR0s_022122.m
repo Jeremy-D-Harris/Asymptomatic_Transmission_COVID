@@ -13,7 +13,7 @@ save_ans_Fig = 0;
 frac_spacing = 0.74;
 frac_scaling = 0.2;
 
-figure_name = 'FigureS2_varymitigation_sameR0s_013122';
+figure_name = 'FigureS2_varymitigation_sameR0s_022122';
 
 f1 = figure(1); set(f1, 'Position', [100 500 800 650]);
 
@@ -191,7 +191,7 @@ for counter=1:3
     this_p.Color(4) = 1-0.18*(counter-1); % transparency
     %     this_p.Color(4) = 0.64+0.18*(counter-1);
     
-    axis([0 params.t_span(end) 0.125 4]);
+    axis([0 params.t_span(end) 0.1 4]);
     yticks([0.125 0.25 0.5 1 2 4]);
     xlabel('Time (days)'); ylabel({'Effective'; 'Reproduction'; 'Number, $\mathcal R_t$'},'Interpreter','Latex');
     f1=gca;
@@ -213,6 +213,7 @@ for counter=1:3
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');
         box('off');
         
         txt = {'4'};
@@ -408,6 +409,7 @@ for counter=1:3
         old_pos = get(f1, 'Position');
         
         set(f1,'yticklabel',[{'0.125'},{'0.25'},{'0.5'},{'1'},{'2'},{''},{''}]);
+        set(f1,'YminorTick','off');
         box('off');
         
         txt = {'4'};

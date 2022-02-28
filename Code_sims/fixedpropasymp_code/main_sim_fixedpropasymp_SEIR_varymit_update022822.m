@@ -1,6 +1,7 @@
 
 %% simulate SEIR model with fixed proportion of asymptomatic incidence, p
-% same transmission rates, beta_a = beta_s
+% same reproduction numbers, R0_a = R0_s
+% vary mitigation level
 
 clear all; close all; clc;
 
@@ -10,118 +11,102 @@ save_ans = 0;
 % 0: don't save
 % 1: save
 
-
-%% mitigation or not?
-with_mitigation = 1;
-% 0: no mitigation
-% 1: with mitigation
+%% vary_duration?
+% vary the time to get down to transmission rates at full mitigation level
+which_mitigation_duration = 2;
+% 1: 20 days
+% 2: 30 days
+% 3: 40 days
 
 
 %% which set of time scales?
-which_timescales = 3; % 1,2,3
-% 1: same time scales: Ta=Ts=5 days
-% 2: longer time scales of asymptomatic transmission: Ta=6,Ts=5 days
-% 3: even longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
+which_mitigation_level = 2; % 1,2,3
+% 1: twice mitigation, 1/20 contacts
+% **2: same as Figure 1, ~1/10 contacts** - use when varying mitigation duration
+% 3: half mitigation, 1/5 contacts
 
 
 %% set up colors and parameters
-cbf_colors_db = [15,32,128]/255; % dark blue - same time scales
-cbf_colors_v = [169,90,161]/255; % violet - longer time scale of asymptomatic
-cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asymptomatc
+cbf_colors_vector_blk = [0, 0, 0]; % black
+cbf_colors_vector_lb = [133,192,249]/255; % light blue
+cbf_colors_vector_gray = [0.5, 0.5, 0.5]; % gray
 
-cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
-
-if which_timescales==1
-    
-    cbf_colors = cbf_colors_vector(1,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/5; gamma_s=1/5;
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4840; beta_s = beta_a;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.79;
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and5.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and5_mit.mat';
-    end
-    
-elseif which_timescales==2
-    
-    cbf_colors = cbf_colors_vector(2,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/6; gamma_s=1/5;
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4640; beta_s = beta_a;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.59;
-    
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and6.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and6_mit.mat';
-    end
-    
-else
-    
-    cbf_colors = cbf_colors_vector(3,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/8; gamma_s=1/5;
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4360; beta_s = beta_a;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.13;
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and8.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_011722_T5and8_mit.mat';
-    end
-    
-end
+cbf_colors_vector = [cbf_colors_vector_blk;cbf_colors_vector_lb;cbf_colors_vector_gray];
 
 
+% decay rates, days^-1
+gamma_a=1/8; gamma_s=1/5;
 
+% set betas s.t. R0,a=R0,s are the same and r=0.14
+beta_a = 0.4360; beta_s = beta_a;
 
-%% mitigation on or off
+% burnin time depends on parameters
+t_end_burnin = 71.13;
 
-if with_mitigation==1
+if which_mitigation_level==1
     
-    % matching final R_t for each time scale
-    if which_timescales==1
+    filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_022822_T5and8_2xintense_mit.mat';
+    
+    
+    %     mitigation_level=0.193;
+    mitigation_level=0.043;
+    t_min = 30;
+    results.t_min=t_min;
+    fprintf('With mitigation level, ~1/20 baseline contacts \n\n');
+    
+    
+elseif which_mitigation_level==2
+    
+    
+    %     mitigation_level=1/10;
+    
+    if which_mitigation_duration == 1
         
-        mitigation_level=0.122; %
+        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_022822_T5and8_20days_mit.mat';
         
-    elseif which_timescales==2
+        t_min = 20;
+        results.t_min=t_min;
+        %         mitigation_level=0.0944;
+        mitigation_level=0.0855;
         
-        mitigation_level=0.11;
         
-    else
+        cbf_colors_vector = [cbf_colors_vector_blk;cbf_colors_vector_blk;cbf_colors_vector_blk];
         
+        
+    elseif which_mitigation_duration == 2
+        
+        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_022822_T5and8_30days_mit.mat';
+        
+        t_min = 30; % same as Figure 1
+        results.t_min=t_min;
+        %         mitigation_level=0.0955; % same as Figure 1
         mitigation_level=0.0865;
         
+        cbf_colors_vector = [cbf_colors_vector_lb;cbf_colors_vector_lb;cbf_colors_vector_lb];
+        
+    else
+        
+        filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_022822_T5and8_40days_mit.mat';
+        
+        t_min = 40;
+        results.t_min=t_min;
+        %         mitigation_level=0.0977;
+        mitigation_level=0.0885;
+        cbf_colors_vector = [cbf_colors_vector_gray;cbf_colors_vector_gray;cbf_colors_vector_gray];
+        
     end
-    fprintf('With mitigation... \n\n');
-    this_title = 'With mitigation';
-    
+    fprintf('With mitigation level, ~1/10 baseline contacts \n\n');
 else
+    filename = 'SEIR_fixedpropasymp_twodiseases_samebetas_022822_T5and8_halfintense_mit.mat';
     
-    mitigation_level=1; % no change in contact rates
-    fprintf('No mitigation... \n\n');
-    this_title = 'No mitigation';
     
+    mitigation_level=0.1748;
+    %     mitigation_level=0.0476;
+    t_min = 30;
+    results.t_min=t_min;
+    fprintf('With mitigation level, ~1/5 baseline contacts \n\n');
 end
+
 
 %% simulate the two disease SEIR model with two infectious compartments:
 % asymptomatic and symptomatic infections
@@ -137,7 +122,7 @@ params.gamma_e = gamma_e;
 
 % mitigation parameters
 params.t_m1 = 70;
-params.t_min = 30;
+params.t_min = t_min;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
 
@@ -213,18 +198,15 @@ GI_distribution_symptomatic = feval(g_s,params.t_span);
 %%
 f1 = figure(1); set(f1, 'Position', [400 250 450 850]);
 subplot(4,1,1);
-q = semilogy(params.t_span, results.total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+semilogy(params.t_span, results.total_incidence,'Color',cbf_colors_vector(which_mitigation_level,:),'LineWidth',2); hold on;
 axis([0 params.t_span(end) 10^(-6) 1]);
-xlabel('Time (days)'); ylabel({'Total'; 'incidence'});
-title(this_title);
+xlabel('Time (days)'); ylabel({'Total'; 'Incidence'});
 % title(['p = ',num2str(proportion_asymp)])
 f1=gca;
 f1.LineWidth = 1;
 f1.FontSize = 14;
 f1.FontWeight = 'normal';
 
-legend(q,{'All infections'},'FontWeight','normal','FontSize',11);
-legend boxoff
 
 % calculate the proportion of asymptomatic transmission
 total_transmission = beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj);
@@ -233,8 +215,7 @@ proportion_asymp_transmission = asymp_transmission./total_transmission;
 results.proportion_asymp_transmission=proportion_asymp_transmission;
 
 figure(1); subplot(4,1,2);
-r(1) = plot(params.t_span, proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
-% r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
+r(1) = plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors_vector(which_mitigation_level,:),'LineWidth',2); hold on;
 axis([0 params.t_span(end) 0 1]);
 xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'transmission'});
 f1=gca;
@@ -242,13 +223,14 @@ f1.LineWidth = 1;
 f1.FontSize = 14;
 f1.FontWeight = 'normal';
 
+
 % calculate the proportion of asymptomatic incidence
 asymp_incidence = proportion_asymp*(beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj));
 proportion_asymp_incidence = asymp_incidence./total_incidence;
 results.proportion_asymp_incidence=proportion_asymp_incidence;
 
 figure(1); subplot(4,1,3);
-r(1) = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+r(1) = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors_vector(which_mitigation_level,:),'LineWidth',2); hold on;
 % r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
 axis([0 params.t_span(end) 0 1]);
 xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'incidence'});
@@ -258,9 +240,8 @@ f1.FontSize = 14;
 f1.FontWeight = 'normal';
 
 
-
 figure(1); subplot(4,1,4);
-semilogy(params.t_span,Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2);
+semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors_vector(which_mitigation_level,:),'LineWidth',2); hold on;
 axis([0 params.t_span(end) 10^-1 10^1]);
 xlabel('Time (days)'); ylabel({'Effective'; 'reproduction'; 'number'});
 f1=gca;
@@ -277,28 +258,8 @@ init_proportion_asymp_incidence = proportion_asymp_incidence(1);
 fprintf('Initial proportion asymptomatic incidence: \n'); % want to be close to 25 days in
 fprintf('%2.2f \n\n',init_proportion_asymp_incidence);
 
-% if you want also plot generation interval distribution
-if 1
-    
-    f2 = figure(2); set(f2, 'Position', [1000   378   560   420]);
-    r(1) = plot(params.t_span, GI_distribution_asymptomatic,'Color',cbf_colors,'LineWidth',2); hold on;
-    r(2) = plot(params.t_span, GI_distribution_symptomatic,'Color',cbf_colors_db,'LineWidth',2); hold on;
-    axis([0 21 0 0.2]);
-    xlabel('Time (days)'); ylabel({'Probability'});
-    title('Generation interval distributions');
-    f2=gca;
-    f2.LineWidth = 1;
-    f2.FontSize = 14;
-    f2.FontWeight = 'normal';
-    
-    legend(r,{['Asymptomatic GI distribution, T_a = ' num2str(1/params.gamma_a)],['Symptomatic GI distribution, T_s = ' num2str(1/params.gamma_s)]},'Location','NorthEast');
-    legend box off
-    
-end
 
-
-%%
-% save simulated data
+%% save simulated data
 if save_ans==1
     folder_location = '../../Code_plt_ms_figures/sim_data/';
     save(strcat(folder_location,filename),'params','results');
