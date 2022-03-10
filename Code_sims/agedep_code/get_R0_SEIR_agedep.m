@@ -32,6 +32,7 @@ diag_gamma_e = diag(gamma_e*ones(N,1));
 q_a_vector = diag(prob_asymp.*sigma);
 q_s_vector = diag(prob_symp.*sigma);
 
+if 0
 % q_susceptible = q_a_vector + q_s_vector;
 
 % dSdt = [- beta_a*q_susceptible*M - beta_s*q_susceptible*M zeros(N,4*N)];
@@ -56,6 +57,17 @@ NGM = -T*(inv(Sigma));
 eigen_values = eig(NGM);
 
 R0_calc = max(eigen_values);
+end
+
+% NGM_a = q_a_vector*M; 
+% NGM_s = q_s_vector*M;
+
+% eigen_values_a = eig(NGM_a); 
+% eigen_values_s = eig(NGM_s);
+
+% R0_calc = (beta_a/gamma_a)*max(eigen_values_a)+(beta_s/gamma_s)*max(eigen_values_s);
+
+R0_calc = max(eig((beta_a/gamma_a)*q_a_vector*M+(beta_s/gamma_s)*q_s_vector*M));
 
 % end
 

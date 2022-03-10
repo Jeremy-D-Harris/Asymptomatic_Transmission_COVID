@@ -11,18 +11,19 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 1;
+with_mitigation = 0;
 % 0: no mitigation
 % 1: with mitigation
 
 
 %% which set of time scales?
-which_timescales = 2; % 1,2
+which_timescales = 1; % 1,2
 % 1: same time scales: Ta=Ts=5 days
 % 2: longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
 
 
 %% variation in symptomaticity?
+% Don't touch !!!
 variation_symptomaticity_yesno =0; % 0,1
 params.variation_symptomaticity_yesno=variation_symptomaticity_yesno;
 % 0: p_n = p
@@ -172,7 +173,7 @@ params.gamma_s = gamma_s;
 params.gamma_e = gamma_e;
 
 % mitigation parameters
-params.t_m1 = 70;
+params.t_m1 = 50;
 params.t_min = 30;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
@@ -222,6 +223,7 @@ S = y_traj(:,1:N);
 E_a = y_traj(:,(N+1):(2*N)); E_s = y_traj(:,(2*N+1):(3*N));
 I_a = y_traj(:,(3*N+1):(4*N)); I_s = y_traj(:,(4*N+1):(5*N));
 R_a = y_traj(:,(5*N+1):(6*N)); R_s = y_traj(:,(6*N+1):(7*N));
+results.y_traj=y_traj;
 
 %% some calculations based on trajectories
 
@@ -353,7 +355,7 @@ if variation_symptomaticity_yesno==0
 else
     plot(params.t_span, results.ave_age_i_all,'--','Color',cbf_colors,'LineWidth',2); hold on;
 end
-axis([0 params.t_span(end) 10 50]);
+axis([0 params.t_span(end) 30 40]);
 xlabel('Time (days)'); ylabel({'Average';'age infection'});
 f1=gca;
 f1.LineWidth = 1;
@@ -460,7 +462,7 @@ Rt_agedep(end)
 if save_ans==1
     
     folder_location = '../../Code_plt_ms_figures/sim_data/';
-    save(strcat(folder_location,filename),'params','results');
+    save(strcat(folder_location,filename),'params','results','data_Shanghai_Davies');
     
     fprintf('Saved to file: \n');
     fprintf(strcat(filename,'\n'));

@@ -5,7 +5,7 @@ clear all; close all; clc;
 
 
 %% want to save?
-save_ans = 1;
+save_ans = 0;
 % 0: don't save
 % 1: save
 
@@ -23,6 +23,7 @@ which_timescales = 2; % 1,2
 
 
 %% variation in symptomaticity?
+% Don't touch !!!
 variation_symptomaticity_yesno =1; % 0,1
 params.variation_symptomaticity_yesno=variation_symptomaticity_yesno;
 % 0: p_n = p
@@ -51,6 +52,7 @@ if which_timescales==1
     gamma_a=1/5; gamma_s=1/5;
     
     % same transmission rates
+%     this_beta = 0.0445;
     this_beta = 0.0445;
     beta_a = this_beta; beta_s = this_beta;
     t_end_burnin = 163.84; % burn-in time
@@ -74,7 +76,7 @@ if which_timescales==1
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
 
-        mitigation_level=0.145;
+        mitigation_level=0.1385;
         
     end
     
@@ -86,7 +88,8 @@ elseif which_timescales==2
     gamma_a=1/8; gamma_s=1/5;
     
     % same transmission rates
-    this_beta = 0.0375;
+%     this_beta = 0.0375;
+    this_beta = 0.0473;
     beta_a = this_beta; beta_s = this_beta;
     t_end_burnin = 165.44; % burn-in time
     susc_allages = 1;
@@ -108,7 +111,9 @@ elseif which_timescales==2
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
         
-        mitigation_level=0.1057;
+%         mitigation_level=0.0983;
+        mitigation_level=0.091;
+%         mitigation_level=0.1;
         
     end
     
@@ -129,14 +134,16 @@ N_total = sum(age_distribution); % total population of Shanghai
 Shanghai_contact_matrix = data_Shanghai_Davies.contact_matrix;
 
 % % create a matrix of the diagonal elements
-% diag_M = diag(diag(Shanghai_contact_matrix(1:N,1:N)));
+diag_M = diag(diag(Shanghai_contact_matrix(1:N,1:N)));
 % 
 % % create a matrix of the off-diagonal elements
-% offdiag_M = Shanghai_contact_matrix(1:N,1:N)-diag_M;
+offdiag_M = Shanghai_contact_matrix(1:N,1:N)-diag_M;
+
+diag_M = 0.5*diag_M;
 
 % contact matrix
-% M = diag_M+offdiag_M;
-M = Shanghai_contact_matrix(1:N,1:N);
+M = diag_M+offdiag_M;
+% M = Shanghai_contact_matrix(1:N,1:N);
 params.M = M;
 
 % posterior means based off of Table 4 - Davies et al. nature letters 2020
@@ -172,7 +179,7 @@ params.gamma_s = gamma_s;
 params.gamma_e = gamma_e;
 
 % mitigation parameters
-params.t_m1 = 70;
+params.t_m1 = 50;
 params.t_min = 30;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
@@ -222,6 +229,7 @@ S = y_traj(:,1:N);
 E_a = y_traj(:,(N+1):(2*N)); E_s = y_traj(:,(2*N+1):(3*N));
 I_a = y_traj(:,(3*N+1):(4*N)); I_s = y_traj(:,(4*N+1):(5*N));
 R_a = y_traj(:,(5*N+1):(6*N)); R_s = y_traj(:,(6*N+1):(7*N));
+results.y_traj=y_traj;
 
 %% some calculations based on trajectories
 
@@ -353,7 +361,7 @@ if variation_symptomaticity_yesno==0
 else
     plot(params.t_span, results.ave_age_i_all,'--','Color',cbf_colors,'LineWidth',2); hold on;
 end
-axis([0 params.t_span(end) 10 50]);
+axis([0 params.t_span(end) 20 50]);
 xlabel('Time (days)'); ylabel({'Average';'age infection'});
 f1=gca;
 f1.LineWidth = 1;
@@ -460,7 +468,7 @@ Rt_agedep(end)
 if save_ans==1
     
     folder_location = '../../Code_plt_ms_figures/sim_data/';
-    save(strcat(folder_location,filename),'params','results');
+    save(strcat(folder_location,filename),'params','results','data_Shanghai_Davies');
     
     fprintf('Saved to file: \n');
     fprintf(strcat(filename,'\n'));

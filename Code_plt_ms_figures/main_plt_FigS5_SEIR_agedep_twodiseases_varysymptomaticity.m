@@ -12,7 +12,7 @@ save_ans = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'FigureS5_agedep_assortativity_varysymptomaticity_022822';
+figure_name = 'FigureS5_agedep_assortativity_varysymptomaticity_030722';
 
 frac_spacing = 0.78;
 frac_scaling = 0.18;
@@ -166,8 +166,8 @@ for counter=1:length(switch_over_var)
     else
         plot(params.t_span, results.proportion_asymptomatic_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
     end
-    axis([0 params.t_span(end) 0.4 1]);
-    yticks([0.4 0.6 0.8 1]);
+    axis([0 params.t_span(end) 0.5 0.7]);
+    yticks([0.5 0.6 0.7]);
     %     xlabel('Time (days)');
     ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
@@ -185,14 +185,14 @@ for counter=1:length(switch_over_var)
         set(f1,'Position',[old_pos(1), old_pos(2)-0.18, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'xticklabel',{[]},'yticklabel',[{' '},{'0.6'},{'0.8'},{' '}]);
+        set(f1,'xticklabel',{[]},'yticklabel',[{' '},{'0.6'},{' '}]);
         box('off');
         
-        txt = {'1'};
-        text(-0.045,0.93,txt,'Units','normalized',...
+        txt = {'0.7'};
+        text(-0.085,0.93,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
         
-        txt = {'0.4'};
+        txt = {'0.5'};
         text(-0.085,0.045,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
         
@@ -456,8 +456,8 @@ for counter=1:length(switch_over_var)
         plot(params.t_span, results.proportion_asymptomatic_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
         
     end
-    axis([0 params.t_span(end) 0.4 1]);
-    yticks([0.4 0.6 0.8 1]);
+    axis([0 params.t_span(end) 0.5 0.7]);
+    yticks([0.5 0.6 0.7]);
     ylabel({'Proportion'; 'Asymptomatic'; 'Incidence, $p(t)$'},'Interpreter','Latex');
     f1=gca;
     f1.LineWidth = 1;
@@ -472,14 +472,14 @@ for counter=1:length(switch_over_var)
         set(f1,'Position',[old_pos(1), old_pos(2)-frac_scaling, old_pos(3), old_pos(4)])
         old_pos = get(f1, 'Position');
         
-        set(f1,'xticklabel',{[]},'yticklabel',[{' '},{'0.6'},{'0.8'},{' '}]);
+        set(f1,'xticklabel',{[]},'yticklabel',[{' '},{'0.6'},{' '}]);
         box('off');
         
-        txt = {'1'};
-        text(-0.045,0.93,txt,'Units','normalized',...
+        txt = {'0.7'};
+        text(-0.085,0.93,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
         
-        txt = {'0.4'};
+        txt = {'0.5'};
         text(-0.085,0.045,txt,'Units','normalized',...
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
         
