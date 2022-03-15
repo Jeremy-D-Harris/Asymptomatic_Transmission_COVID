@@ -12,7 +12,7 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 0;
+with_mitigation = 1;
 % 0: no mitigation
 % 1: with mitigation
 
@@ -62,7 +62,7 @@ elseif which_timescales==2
     gamma_a=1/8; gamma_s=1/5;
     
     % set betas s.t. r=0.14 and initial proportion of asymptomatic incidence is 0.4 (see methods)
-    beta_a = 0.4347; beta_s = beta_a;
+    beta_a = 0.436; beta_s = beta_a;
     
     % fix the initial proportion asymptomatic incidence to p_e = 0.4
     % line wrt p_aa and p_as s.t. p_e=0.4 when Ta=8, Ts=5 
@@ -73,7 +73,7 @@ elseif which_timescales==2
     params.p_as = p_as;
     
     % burnin time depends on parameters
-    t_end_burnin = 71.54;
+    t_end_burnin = 71.14;
     
     
     if with_mitigation==0

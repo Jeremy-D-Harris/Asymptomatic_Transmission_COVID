@@ -11,7 +11,7 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 0;
+with_mitigation = 1;
 % 0: no mitigation
 % 1: with mitigation
 
@@ -94,7 +94,7 @@ elseif which_timescales==2
     this_beta = 0.0508;
     this_R0 = this_beta/gamma_s;
     beta_a = this_R0*gamma_a; beta_s = this_beta;
-    t_end_burnin = 165.44; % burn-in time
+    t_end_burnin = 164.31; % burn-in time
     susc_allages = 1;
     
     

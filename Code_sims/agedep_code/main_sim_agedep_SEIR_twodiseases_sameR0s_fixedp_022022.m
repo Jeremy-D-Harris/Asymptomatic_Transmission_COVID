@@ -5,7 +5,7 @@
 
 
 %% want to save?
-save_ans = 0;
+save_ans = 1;
 % 0: don't save
 % 1: save
 
@@ -75,7 +75,7 @@ if which_timescales==1
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
 
-        mitigation_level=0.145;
+        mitigation_level=0.1386;
         
     end
     
@@ -176,7 +176,7 @@ params.gamma_s = gamma_s;
 params.gamma_e = gamma_e;
 
 % mitigation parameters
-params.t_m1 = 70;
+params.t_m1 = 50;
 params.t_min = 30;
 params.t_m2 = params.t_m1+params.t_min;
 params.mitigation_level = mitigation_level;
