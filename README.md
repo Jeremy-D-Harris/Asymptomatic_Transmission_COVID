@@ -8,7 +8,7 @@ Jeremy Harris and Sang Woo Park and collaborators, April 2022
   (2) Correlations between transmission and disease statuses; <br>
   (3) Assortative mixing by age using age-dependent contact rates and clinical severity estimates by age.
 
-A preprint of the manuscript can be found on MedRxiv: [link](XXX) -- not yet!! <br>
+A preprint of the manuscript can be found on MedRxiv: [DOI](https://www.medrxiv.org/content/10.1101/2022.04.21.22274139v1)
 
 **Instructions:** 
 MATLAB was used to parametrise models, run simulations, and plot figures -- with the exception of an R-script to plot CDC surveillance data on mortality and median age of infection (May-Aug 2020). Once the Github repository is downloaded, navigate to the subdirectory 'Code_plt_ms_figures' to plot the figures in the manuscript by running the appropriate function. Simulation data can be reproduced by navigating to 'Code_sims' and running appropriate functions. See below for subfolder descriptions.
