@@ -5,7 +5,7 @@ clear all; close all; clc;
 
 
 %% want to save?
-save_ans = 1;
+save_ans = 0;
 % 0: don't save
 % 1: save
 
@@ -17,9 +17,10 @@ with_mitigation = 0;
 
 
 %% which set of time scales?
-which_timescales = 2; % 1,2
+which_timescales = 3; % 1,2,3
 % 1: same time scales: Ta=Ts=5 days
 % 2: longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
+% 3: longer time scales of asymptomatic transmission: Ta=8,Ts=2 days
 
 
 %% variation in symptomaticity?
@@ -117,6 +118,43 @@ elseif which_timescales==2
         
         %         mitigation_level=0.0983;
         mitigation_level=0.0985;
+        %         mitigation_level=0.1;
+        
+    end
+    
+    
+else %which_timescales==3
+    
+    cbf_colors = [0, 0, 0];
+    
+    % decay rates, days^-1
+    gamma_a=1/8; gamma_s=1/2;
+    
+    % same transmission rates
+    this_beta = 0.04218;
+    beta_a = this_beta; beta_s = this_beta;
+    t_end_burnin = 168.96; % burn-in time
+    susc_allages = 1;
+    
+    
+    if with_mitigation==0
+        
+        filename = 'SEIR_agedep_twodiseases_variationsymp_samebetas_T2and8.mat';
+        
+        fprintf('Susceptible Depletion ... \n\n');
+        this_title = 'Susceptible Depletion';
+        
+        mitigation_level=1;
+        
+    else
+        
+        filename = 'SEIR_agedep_twodiseases_variationsymp_samebetas_T2and8_mit.mat';
+        
+        fprintf('With Mitigation ... \n\n');
+        this_title = 'With Mitigation';
+        
+        %         mitigation_level=0.0983;
+        mitigation_level=0.1206;
         %         mitigation_level=0.1;
         
     end
