@@ -34,32 +34,45 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [15,32,128]/255; % dark blue
+            beta_s1 = params.beta_s;
+            beta_a1 = params.beta_a;
             gamma_s1 = params.gamma_s;
             gamma_a1 = params.gamma_a;
+            R0_agedep1 = results.Rt_fixedpropasymp(1);
             
         case 6
             % load: Ta=6
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [169,90,161]/255; % violet
+            beta_s2 = params.beta_s;
+            beta_a2 = params.beta_a;
             gamma_s2 = params.gamma_s;
             gamma_a2 = params.gamma_a;
+            R0_agedep2 = results.Rt_fixedpropasymp(1);
             
         case 8
             % load: Ta=8
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
+            beta_s3 = params.beta_s;
+            beta_a3 = params.beta_a;
             gamma_s3 = params.gamma_s;
             gamma_a3 = params.gamma_a;
+            R0_agedep3 = results.Rt_fixedpropasymp(1);
+            
             
         case 9
             % load: Ta=8
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_100522_T2and8.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [0,0,0]/255; % black
+            beta_s4 = params.beta_s;
+            beta_a4 = params.beta_a;
             gamma_s4 = params.gamma_s;
             gamma_a4 = params.gamma_a;
+            R0_agedep4 = results.Rt_fixedpropasymp(1);
             
     end
     

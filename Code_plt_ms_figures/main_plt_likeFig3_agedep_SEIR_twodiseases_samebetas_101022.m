@@ -12,7 +12,7 @@ save_ans = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'FigureS5_agedep_assortativity_symptomaticity_samebetas_101022';
+figure_name = 'FigureSupp_agedep_assortativity_symptomaticity_samebetas_101122';
 
 frac_spacing = 0.78;
 frac_scaling = 0.18;
@@ -604,7 +604,7 @@ end
 %% save figure
 if save_ans
     
-    folder_location = './../Figures_ms_all/main/';
+    folder_location = './../Figures_ms_all/supp/';
     saveas(f1,strcat(folder_location,figure_name),'epsc');
     
     fprintf('Figure saved:\n');
