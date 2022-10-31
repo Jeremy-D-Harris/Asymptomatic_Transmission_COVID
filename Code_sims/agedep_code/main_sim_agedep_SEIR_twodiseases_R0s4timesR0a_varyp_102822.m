@@ -1,6 +1,7 @@
 
 %% simulate age-dependent SEIR model with asymptomatic and symptomatic transmission
-% this script includes Ts=2 days,Ta=8 days
+% this script has R0s = 4*R0a
+
 clear all; close all; clc;
 
 
@@ -11,16 +12,16 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 0;
+with_mitigation = 1;
 % 0: no mitigation
 % 1: with mitigation
 
 
 %% which set of time scales?
-which_timescales = 3; % 1,2
+which_timescales = 1; % 1,2
 % 1: same time scales: Ta=Ts=5 days
 % 2: longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
-% 3: longer time scales of asymptomatic transmission: Ta=8,Ts=2 days
+% NOT USED HERE!! 3: longer time scales of asymptomatic transmission: Ta=8,Ts=2 days
 
 
 %% variation in symptomaticity?
@@ -54,16 +55,18 @@ if which_timescales==1
     
     % same transmission rates
     %     this_beta = 0.0445;
-    this_beta = 0.0445;
-    beta_a = this_beta; beta_s = this_beta;
-    t_end_burnin = 163.84; % burn-in time
+    this_beta = 0.0192;
+    this_R0 = this_beta/gamma_a;
+    beta_a = this_beta; beta_s = 4*this_R0*gamma_s;
+    
+    t_end_burnin = 163.45; % burn-in time
     susc_allages = 1;
     
     
     % file names of simulations if saved
     if with_mitigation==0
         
-        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_T5and5.mat';
+        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_Rs4timesRa_T5and5.mat';
         
         fprintf('Susceptible Depletion ... \n\n');
         this_title = 'Susceptible Depletion';
@@ -72,12 +75,12 @@ if which_timescales==1
         
     else
         
-        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_T5and5_mit.mat';
+        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_Rs4timesRa_T5and5_mit.mat';
         
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
         
-        mitigation_level=0.1385;
+        mitigation_level=0.122;
         
     end
     
@@ -90,18 +93,18 @@ elseif which_timescales==2
     
     % same transmission rates
     %     this_beta = 0.0375;
+        
+    this_beta = 0.01248;
+    this_R0 = this_beta/gamma_a;
+    beta_a = this_beta; beta_s = 4*this_R0*gamma_s;
     
-    
-    this_beta = 0.0508;
-    this_R0 = this_beta/gamma_s;
-    beta_a = this_R0*gamma_a; beta_s = this_beta;
-    t_end_burnin = 164.31; % burn-in time
+    t_end_burnin = 164.09; % burn-in time
     susc_allages = 1;
     
     
     if with_mitigation==0
         
-        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_T5and8.mat';
+        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_Rs4timesRa_T5and8.mat';
         
         fprintf('Susceptible Depletion ... \n\n');
         this_title = 'Susceptible Depletion';
@@ -110,13 +113,13 @@ elseif which_timescales==2
         
     else
         
-        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_T5and8_mit.mat';
+        filename = 'SEIR_agedep_twodiseases_variationsymptomaticity_Rs4timesRa_T5and8_mit.mat';
         
         fprintf('With Mitigation ... \n\n');
         this_title = 'With Mitigation';
         
         %         mitigation_level=0.0983;
-        mitigation_level=0.095;
+        mitigation_level=0.109;
         %         mitigation_level=0.1;
         
     end
