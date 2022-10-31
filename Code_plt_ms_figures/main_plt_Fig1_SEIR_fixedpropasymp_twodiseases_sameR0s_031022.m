@@ -15,7 +15,7 @@ figure_name = 'Figure1_fixedpropasymp_sameR0s_031022';
 
 %% load no mitigation files
 
-switch_over_Ta = [5,6,8,9]; % note that 9 corresponds to Ta=8,Ts=2days
+switch_over_Ta = [5,6,8]; % note that 9 corresponds to Ta=8,Ts=2days
 
 frac_spacing = 0.74;
 frac_scaling = 0.2;
@@ -34,6 +34,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [15,32,128]/255; % dark blue
+            beta_s1 = params.beta_s;
+            beta_a1 = params.beta_a;
             gamma_s1 = params.gamma_s;
             gamma_a1 = params.gamma_a;
             
@@ -42,6 +44,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [169,90,161]/255; % violet
+            beta_s2 = params.beta_s;
+            beta_a2 = params.beta_a;
             gamma_s2 = params.gamma_s;
             gamma_a2 = params.gamma_a;
             
@@ -50,6 +54,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
+            beta_s3 = params.beta_s;
+            beta_a3 = params.beta_a;
             gamma_s3 = params.gamma_s;
             gamma_a3 = params.gamma_a;
             
@@ -58,6 +64,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_100522_T2and8.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [0,0,0]/255; % black
+            beta_s4 = params.beta_s;
+            beta_a4 = params.beta_a;
             gamma_s4 = params.gamma_s;
             gamma_a4 = params.gamma_a;
             
@@ -90,7 +98,7 @@ for counter=1:length(switch_over_Ta)
     
     title('Susceptible Depletion','FontSize',16);
     
-    if counter==4
+    if counter==3
         txt = {'A'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -125,7 +133,7 @@ for counter=1:length(switch_over_Ta)
     f1.FontName = 'Times';
     
     
-    if counter==4
+    if counter==3
         txt = {'B'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -162,7 +170,7 @@ for counter=1:length(switch_over_Ta)
     f1.FontName = 'Times';
     
     
-    if counter==4
+    if counter==3
         txt = {'C'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -203,7 +211,7 @@ for counter=1:length(switch_over_Ta)
     %     this_p.Color(4) = 1-0.18*(counter);
     
     
-    if counter==4
+    if counter==3
         txt = {'D'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -241,6 +249,8 @@ for counter=1:length(switch_over_Ta)
             load(strcat('./sim_data/',infile));
             %             cbf_colors = [0.5,0.5,0.5]; % gray
             cbf_colors = [15,32,128]/255; % dark blue
+            beta_s1 = params.beta_s;
+            beta_a1 = params.beta_a;
             gamma_s1 = params.gamma_s;
             gamma_a1 = params.gamma_a;
             
@@ -249,6 +259,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6_mit.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [169,90,161]/255; % violet
+            beta_s2 = params.beta_s;
+            beta_a2 = params.beta_a;
             gamma_s2 = params.gamma_s;
             gamma_a2 = params.gamma_a;
             
@@ -258,6 +270,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8_mit.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [133,192,249]/255; % light blue
+            beta_s3 = params.beta_s;
+            beta_a3 = params.beta_a;
             gamma_s3 = params.gamma_s;
             gamma_a3 = params.gamma_a;
             
@@ -266,6 +280,8 @@ for counter=1:length(switch_over_Ta)
             infile = 'SEIR_fixedpropasymp_twodiseases_sameR0s_100522_T2and8_mit.mat';
             load(strcat('./sim_data/',infile));
             cbf_colors = [0,0,0]/255; % light blue
+            beta_s4 = params.beta_s;
+            beta_a4 = params.beta_a;
             gamma_s4 = params.gamma_s;
             gamma_a4 = params.gamma_a;
             
@@ -300,7 +316,7 @@ for counter=1:length(switch_over_Ta)
     
     title('Intervention','FontSize',16);
     
-    if counter==4
+    if counter==3
         txt = {'E'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -317,13 +333,13 @@ for counter=1:length(switch_over_Ta)
             'FontSize',14,'FontWeight','normal','FontName', 'Times');
     end
     
-    if counter==4
+    if counter==3
         
         legend_char1 = ['$T_s = T_a = ', num2str(1/gamma_a1),'$'];
         legend_char2 = ['$T_s = ', num2str(1/gamma_s2),'$, $T_a = ', num2str(1/gamma_a2),'$'];
         legend_char3 = ['$T_s = ', num2str(1/gamma_s3),'$, $T_a = ', num2str(1/gamma_a3),'$'];
-        legend_char4 = ['$T_s = ', num2str(1/gamma_s4),'$, $T_a = ', num2str(1/gamma_a4),'$'];
-        legend(h,{legend_char1,legend_char2,legend_char3,legend_char4}, 'Interpreter','Latex','Location','NorthEast','FontSize',11);
+%         legend_char4 = ['$T_s = ', num2str(1/gamma_s4),'$, $T_a = ', num2str(1/gamma_a4),'$'];
+        legend(h,{legend_char1,legend_char2,legend_char3}, 'Interpreter','Latex','Location','NorthEast','FontSize',11);
         
         legend boxoff
     end
@@ -344,7 +360,7 @@ for counter=1:length(switch_over_Ta)
     
     
     
-    if counter==4
+    if counter==3
         txt = {'F'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -378,7 +394,7 @@ for counter=1:length(switch_over_Ta)
     f1.FontName = 'Times';
     
     
-    if counter==4
+    if counter==3
         txt = {'G'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -412,7 +428,7 @@ for counter=1:length(switch_over_Ta)
     f1.FontWeight = 'normal';
     f1.FontName = 'Times';
     
-    if counter==4
+    if counter==3
         txt = {'H'};
         text(0.025,0.925,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
         
@@ -434,7 +450,7 @@ end
 %% save figure
 if save_ans_Fig
     
-    folder_location = './../Figures_ms_all/extra_figs/';
+    folder_location = './../Figures_ms_all/main/';
     saveas(f1,strcat(folder_location,figure_name),'epsc');
     
     fprintf('Figure saved:\n');
