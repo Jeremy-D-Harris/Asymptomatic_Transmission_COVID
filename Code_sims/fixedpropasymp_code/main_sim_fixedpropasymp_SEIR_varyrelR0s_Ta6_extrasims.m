@@ -1,6 +1,6 @@
 
 %% simulate SEIR model with fixed proportion of asymptomatic incidence, p
-% same reproduction numbers, R0_a = R0_s
+% same time scales: Ts=5,Ta=6 days, vary R0_s = k*R0_a, k=1,2,3,4
 
 clear all; close all; clc;
 
@@ -17,42 +17,25 @@ with_mitigation = 1;
 % 1: with mitigation
 
 
-%% which set of time scales?
-which_timescales = 3; % 1,2,3
-% 1: same time scales: Ta=Ts=5 days
-% 2: longer time scales of asymptomatic transmission: Ta=6,Ts=5 days
-% 3: even longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
+%% which set of beta values?
+which_multiplier = 4; % 1,2,3,4 - same time scales: Ts=5,Ta=6 days
+% 1: R_s = R_a (blue line)
+% 2: R_s = 2*R_a (violet)
+% 3: R_s = 3*R_a (light blue)
+% 4: R_s = 4*R_a (gray)
 
 
 %% set up colors and parameters
-cbf_colors_db = [15,32,128]/255; % dark blue - same time scales
-cbf_colors_v = [169,90,161]/255; % violet - longer time scale of asymptomatic
-cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asymptomatc
+cbf_colors_db = [15,32,128]/255; % dark blue 
+cbf_colors_v = [169,90,161]/255; % violet 
+cbf_colors_lb = [133,192,249]/255; % light blue 
+cbf_colors_g = [0.5,0.5,0.5]; % gray
 
-cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
+cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb;cbf_colors_g];
 
-if which_timescales==1
+if which_multiplier==1
     
     cbf_colors = cbf_colors_vector(1,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/5; gamma_s=1/5;
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4835; beta_s = beta_a;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.94;
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5_mit.mat';
-    end
-    
-elseif which_timescales==2
-    
-    cbf_colors = cbf_colors_vector(2,:);
     
     % decay rates, days^-1
     gamma_a=1/6; gamma_s=1/5;
@@ -63,30 +46,70 @@ elseif which_timescales==2
     % burnin time depends on parameters
     t_end_burnin = 71.85;
     
-    
     if with_mitigation==0
         filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6.mat';
     else
         filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6_mit.mat';
     end
     
-else
+elseif which_multiplier==2
+    
+    cbf_colors = cbf_colors_vector(2,:);
+    
+    % decay rates, days^-1
+    gamma_a=1/6; gamma_s=1/5;
+    
+    % set betas s.t. R0,s=2*R0,a are the same and r=0.14
+    beta_a = 0.2565; beta_s = 2*(beta_a/gamma_a)*gamma_s;
+    
+    % burnin time depends on parameters
+    t_end_burnin = 71.91;
+    
+    
+    if with_mitigation==0
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_102622_T5and6.mat';
+    else
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_102622_T5and6_mit.mat';
+    end
+    
+    
+    elseif which_multiplier==3
     
     cbf_colors = cbf_colors_vector(3,:);
     
     % decay rates, days^-1
-    gamma_a=1/8; gamma_s=1/5;
+    gamma_a=1/6; gamma_s=1/5;
     
-    % set betas s.t. R0,s=R0,a are the same and r=0.14
-    beta_a = 0.3275; beta_s = (beta_a/gamma_a)*gamma_s; %0.4970;
+    % set betas s.t. R0,s=3*R0,a are the same and r=0.14
+    beta_a = 0.1855; beta_s = 3*(beta_a/gamma_a)*gamma_s;
     
     % burnin time depends on parameters
-    t_end_burnin = 71.94;
+    t_end_burnin = 71.96;
+    
     
     if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_102622_T5and6.mat';
     else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8_mit.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_102622_T5and6_mit.mat';
+    end
+    
+else
+    
+    cbf_colors = cbf_colors_vector(4,:);
+    
+    % decay rates, days^-1
+    gamma_a=1/6; gamma_s=1/5;
+    
+    % set betas s.t. R0,a=4*R0,s are the same and r=0.14
+    beta_a = 0.1453; beta_s = 4*(beta_a/gamma_a)*gamma_s;
+    
+    % burnin time depends on parameters
+    t_end_burnin = 71.97;
+    
+    if with_mitigation==0
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_102622_T5and6.mat';
+    else
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_102622_T5and6_mit.mat';
     end
     
 end
@@ -99,17 +122,21 @@ end
 if with_mitigation==1
     
     % matching final R_t for each time scale
-    if which_timescales==1
+    if which_multiplier==1
         
-        mitigation_level=0.1225;
+        mitigation_level=0.112; % 
         
-    elseif which_timescales==2
+    elseif which_multiplier==2
         
         mitigation_level=0.115; 
         
+    elseif which_multiplier==3
+        
+        mitigation_level=0.1178; 
+        
     else
         
-        mitigation_level=0.0955;
+        mitigation_level=0.119;
         
     end
     

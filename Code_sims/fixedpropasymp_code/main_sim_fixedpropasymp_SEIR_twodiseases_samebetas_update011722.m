@@ -39,7 +39,7 @@ if which_timescales==1
     gamma_a=1/5; gamma_s=1/5;
     
     % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4840; beta_s = beta_a;
+    beta_a = 0.4835; beta_s = beta_a;
     
     % burnin time depends on parameters
     t_end_burnin = 71.79;
@@ -101,7 +101,7 @@ if with_mitigation==1
     % matching final R_t for each time scale
     if which_timescales==1
         
-        mitigation_level=0.122; %
+        mitigation_level=0.1225;
         
     elseif which_timescales==2
         
@@ -157,11 +157,11 @@ eigen_direction_fixedpropasymp = get_eigendirection_SEIR_twodiseases_fixedpropas
 
 R0_fixedpropasymp = get_R0_SEIR_twodiseases_fixedpropasymp(params);
 fprintf('Basic reproductive number \n');
-fprintf('R_0 =  %2.2f \n\n',R0_fixedpropasymp);
+fprintf('R_0 =  %2.4f \n\n',R0_fixedpropasymp);
 
 r_fixedpropasymp = get_r_SEIR_twodiseases_fixedpropasymp(params);
 fprintf('Exponential growth rate \n');
-fprintf('r =  %2.2f \n\n',r_fixedpropasymp);
+fprintf('r =  %2.4f \n\n',r_fixedpropasymp);
 
 perturb = 1e-11;
 if eigen_direction_fixedpropasymp(1)<0

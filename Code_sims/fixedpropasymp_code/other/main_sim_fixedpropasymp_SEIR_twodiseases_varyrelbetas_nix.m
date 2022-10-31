@@ -12,85 +12,38 @@ save_ans = 0;
 
 
 %% mitigation or not?
-with_mitigation = 1;
+with_mitigation = 0;
 % 0: no mitigation
 % 1: with mitigation
 
 
-%% which set of time scales?
-which_timescales = 3; % 1,2,3
-% 1: same time scales: Ta=Ts=5 days
-% 2: longer time scales of asymptomatic transmission: Ta=6,Ts=5 days
-% 3: even longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
-
-
 %% set up colors and parameters
 cbf_colors_db = [15,32,128]/255; % dark blue - same time scales
-cbf_colors_v = [169,90,161]/255; % violet - longer time scale of asymptomatic
+% cbf_colors_v = [169,90,161]/255; % violet - longer time scale of asymptomatic
 cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asymptomatc
 
-cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
+% cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
 
-if which_timescales==1
-    
-    cbf_colors = cbf_colors_vector(1,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/5; gamma_s=1/5;
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    beta_a = 0.4835; beta_s = beta_a;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.94;
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and5_mit.mat';
-    end
-    
-elseif which_timescales==2
-    
-    cbf_colors = cbf_colors_vector(2,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/6; gamma_s=1/5;
-    
-    % set betas s.t. R0,s=R0,a are the same and r=0.14
-    beta_a = 0.4154; beta_s = (beta_a/gamma_a)*gamma_s; %0.4970;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.85;
-    
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6_mit.mat';
-    end
-    
+% cbf_colors = cbf_colors_vector(3,:);
+cbf_colors = [0 0 0];
+
+% decay rates, days^-1
+gamma_a=1/5; gamma_s=1/5;
+
+% set betas s.t. R0,a=R0,s are the same and r=0.14
+beta_s = 1.08;
+beta_a = beta_s/4; 
+
+%     0.5260*(5/2)
+
+% burnin time depends on parameters
+t_end_burnin = 71.82;
+
+if with_mitigation==0
+    filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_100522_T2and8.mat';
 else
-    
-    cbf_colors = cbf_colors_vector(3,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/8; gamma_s=1/5;
-    
-    % set betas s.t. R0,s=R0,a are the same and r=0.14
-    beta_a = 0.3275; beta_s = (beta_a/gamma_a)*gamma_s; %0.4970;
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.94;
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and8_mit.mat';
-    end
-    
+    filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_100522_T2and8_mit.mat';
 end
-
 
 
 
@@ -99,20 +52,7 @@ end
 if with_mitigation==1
     
     % matching final R_t for each time scale
-    if which_timescales==1
-        
-        mitigation_level=0.1225;
-        
-    elseif which_timescales==2
-        
-        mitigation_level=0.115; 
-        
-    else
-        
-        mitigation_level=0.0955;
-        
-    end
-    
+    mitigation_level=0.169;
     
     fprintf('With mitigation... \n\n');
     this_title = 'With mitigation';
@@ -216,7 +156,7 @@ GI_distribution_symptomatic = feval(g_s,params.t_span);
 f1 = figure(1); set(f1, 'Position', [400 250 450 850]);
 subplot(4,1,1);
 % q = semilogy(params.t_span, results.I_tot,'Color',cbf_colors,'LineWidth',2); hold on;
-q = semilogy(params.t_span, total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+q = semilogy(params.t_span, total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
 axis([0 params.t_span(end) 10^(-6) 1]);
 xlabel('Time (days)'); ylabel({'Total'; 'incidence'});
 title(this_title);
@@ -237,7 +177,7 @@ proportion_asymp_transmission = asymp_transmission./total_transmission;
 results.proportion_asymp_transmission=proportion_asymp_transmission;
 
 figure(1); subplot(4,1,2);
-r(1) = plot(params.t_span, results.proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
+r(1) = plot(params.t_span, results.proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
 % r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
 axis([0 params.t_span(end) 0 1]);
 xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'transmission'});
@@ -252,7 +192,7 @@ proportion_asymp_incidence = asymp_incidence./total_incidence;
 results.proportion_asymp_incidence=proportion_asymp_incidence;
 
 figure(1); subplot(4,1,3);
-r(1) = plot(params.t_span, results.proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
+r(1) = plot(params.t_span, results.proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
 % r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
 axis([0 params.t_span(end) 0 1]);
 xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'incidence'});
@@ -262,9 +202,8 @@ f1.FontSize = 14;
 f1.FontWeight = 'normal';
 
 
-
 figure(1); subplot(4,1,4);
-semilogy(params.t_span,results.Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2);
+semilogy(params.t_span,results.Rt_fixedpropasymp,'--','Color',cbf_colors,'LineWidth',2);
 axis([0 params.t_span(end) 10^-1 10^1]);
 xlabel('Time (days)'); ylabel({'Effective'; 'reproduction'; 'number'});
 f1=gca;
@@ -285,7 +224,7 @@ fprintf('%2.2f \n\n',init_proportion_asymp_incidence);
 if 1
     
     f2 = figure(2); set(f2, 'Position', [1000   378   560   420]);
-    r(1) = plot(params.t_span, GI_distribution_asymptomatic,'Color',cbf_colors,'LineWidth',2); hold on;
+    r(1) = plot(params.t_span, GI_distribution_asymptomatic,'Color',cbf_colors_lb,'LineWidth',2); hold on;
     r(2) = plot(params.t_span, GI_distribution_symptomatic,'Color',cbf_colors_db,'LineWidth',2); hold on;
     axis([0 21 0 0.2]);
     xlabel('Time (days)'); ylabel({'Probability'});
