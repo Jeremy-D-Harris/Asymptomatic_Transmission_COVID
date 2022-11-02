@@ -2,7 +2,7 @@
 % panel A: initial proportion asymptomatic transmission vs. R_0,s/R_0,a
 % panel B: change in realized proportion asymptomatic transmission vs. R_0,s/R_0,a
 
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %% save figure?
 save_ans_Fig = 0;
@@ -19,19 +19,21 @@ cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asym
 cbf_colors_vector = [cbf_colors_v;cbf_colors_lb];
 %%
 p = 0.4; % intrinsic proportion of asymptomatic infections
-t_vary = [1,5/6,5/8]; % ratio of T_s/T_a = t
+% t_vary = [1,5/6,5/8]; % ratio of T_s/T_a = t
+% t_vary = [1,1,1]; % ratio of T_s/T_a = t
 
-k_vector = linspace(0,5,51); % ratio of beta_s/beta_a = k
-k_discrete = k_vector(11:10:41);
+k_vector = linspace(1,4,4); % ratio of beta_s/beta_a = k
+% k_discrete = k_vector(1:2:end);
 
-for count=1:length(t_vary)
+% for count=1:length(t_vary)
     
-    this_t = t_vary(count);
+%     this_t = t_vary(count);
     
-    z(count,:) = p./(p+(1-p)*k_vector*this_t); % initial proprotion of asymptomatic transmission
-    z_discrete(count,:) = z(count,11:10:41);
+%     z_discrete(count,:) = p./(p+(1-p)*k_vector*this_t); % initial proprotion of asymptomatic transmission
+    z_discrete= p./(p+(1-p)*k_vector); % initial proprotion of asymptomatic transmission
+%     z_discrete(count,:) = z(count,:);
     
-end
+% end
 
 
 % now load files and calculate change in proportion asymptomatic transmission
@@ -89,8 +91,8 @@ final_prop_asymp_trans_Ta8(4)=results.proportion_asymp_transmission(end);
 
 change_prop_asymp_trans_Ta8=final_prop_asymp_trans_Ta8-init_prop_asymp_trans_Ta8;
 
-diff_q_z_Ta6 = init_prop_asymp_trans_Ta6-z_discrete(2,:);
-diff_q_z_Ta8 = init_prop_asymp_trans_Ta8-z_discrete(3,:);
+diff_q_z_Ta6 = init_prop_asymp_trans_Ta6-z_discrete;
+diff_q_z_Ta8 = init_prop_asymp_trans_Ta8-z_discrete;
 
 %% plot relationships with proportion asymptomatic transmission
 % plot q-z vs. R0s/R0a
@@ -98,9 +100,9 @@ f1 = figure(1); set(f1, 'Position', [100 500 850 350]);
 subplot(1,2,1);
 this_h(1)=plot(1:4,diff_q_z_Ta6,'.-','Color',cbf_colors_vector(1,:),'LineWidth',2,'MarkerSize',18); hold on;
 this_h(2)=plot(1:4,diff_q_z_Ta8,'.-','Color',cbf_colors_vector(2,:),'LineWidth',2,'MarkerSize',18); hold on;
-axis([0 5 -0.2 0]);
+axis([0 5 -0.06 0]);
 xticks([0:1:5]);
-yticks([-0.2:0.05:0]);
+yticks([-0.06:0.02:0]);
 xlabel('$\mathcal R_{0,s}/\mathcal R_{0,a}$','Interpreter','Latex');
 % xlabel('$\beta_{s}/\beta_{a}$','Interpreter','Latex');
 ylabel({'Difference between '; 'Intrinsic and Realized Proportions of'; 'Asymptomatic Transmission, $q(0)-z$'},'Interpreter','Latex');
@@ -110,8 +112,8 @@ f1.FontSize = 14;
 f1.FontWeight = 'normal';
 f1.FontName = 'Times';
 
-set(f1,'xticklabel',[{'0'},{'1'},{'2'},{'3'},{'4'},{'5'}]);
-set(f1,'yticklabel',[{'-0.2'},{'-0.15'},{'-0.1'},{'-0.05'},{'0'}]);
+% set(f1,'xticklabel',[{'0'},{'1'},{'2'},{'3'},{'4'},{'5'}]);
+% set(f1,'yticklabel',[{'-0.2'},{'-0.15'},{'-0.1'},{'-0.05'},{'0'}]);
 
 txt = {'A'};
 text(0.025,0.95,txt,'Units','normalized','FontSize',14,'FontWeight','bold');
