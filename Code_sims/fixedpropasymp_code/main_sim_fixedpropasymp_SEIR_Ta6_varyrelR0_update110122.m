@@ -56,7 +56,7 @@ fixed_r = 0.14;
 params.fixed_r = fixed_r;
 
 % k_vector_relR0 = 0.5:0.5:4;
-k_vector_relR0 = 0.1:0.1:4;
+k_vector_relR0 = 1:0.1:4;
 params.k_vector_relR0 = k_vector_relR0;
 
 
