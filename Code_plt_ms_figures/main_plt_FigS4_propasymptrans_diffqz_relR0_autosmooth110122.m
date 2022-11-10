@@ -3,13 +3,13 @@
 % panel B: change in realized proportion asymptomatic transmission vs. R_0,s/R_0,a
 
 clear all; close all; clc;
-
+% 
 %% save figure?
-save_ans_Fig = 1;
+save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
-figure_name = 'SuppFig_fixedpropasymp_diffqz_vs_ratioR0_autosmooth_110122';
+figure_name = 'FigureS4_fixedpropasymp_diffqz_vs_ratioR0_autosmooth_110922';
 
 %% set up colors
 % cbf_colors_db = [15,32,128]/255; % dark blue - same time scales
