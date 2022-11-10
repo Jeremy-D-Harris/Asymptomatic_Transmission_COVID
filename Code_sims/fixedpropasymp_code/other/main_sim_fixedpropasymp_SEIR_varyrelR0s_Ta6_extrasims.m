@@ -1,12 +1,12 @@
 
 %% simulate SEIR model with fixed proportion of asymptomatic incidence, p
-% same time scales: Ts=5,Ta=8 days, vary R0_s = k*R0_a, k=1,2,3,4
+% same time scales: Ts=5,Ta=6 days, vary R0_s = k*R0_a, k=1,2,3,4
 
 clear all; close all; clc;
 
 
 %% want to save?
-save_ans = 1;
+save_ans = 0;
 % 0: don't save
 % 1: save
 
@@ -18,33 +18,20 @@ with_mitigation = 1;
 
 
 %% which set of beta values?
-which_multiplier = 4; % 1,2,3,4 - same time scales: Ts=5,Ta=8 days
+which_multiplier = 4; % 1,2,3,4 - same time scales: Ts=5,Ta=6 days
 % 1: R_s = R_a (blue line)
 % 2: R_s = 2*R_a (violet)
 % 3: R_s = 3*R_a (light blue)
-% 3: R_s = 3*R_a (gray)
-
+% 4: R_s = 4*R_a (gray)
 
 
 %% set up colors and parameters
-cbf_colors_db = [15,32,128]/255; % dark blue
-cbf_colors_v = [169,90,161]/255; % violet
-cbf_colors_lb = [133,192,249]/255; % light blue
+cbf_colors_db = [15,32,128]/255; % dark blue 
+cbf_colors_v = [169,90,161]/255; % violet 
+cbf_colors_lb = [133,192,249]/255; % light blue 
 cbf_colors_g = [0.5,0.5,0.5]; % gray
 
 cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb;cbf_colors_g];
-
-% burnin time depends on parameters
-t_end_burnin = 71.87;
-
-% parameters
-gamma_e=1/3; % 3 day exposure period
-
-% p is the proportion of asymptomatic incidence
-proportion_asymp = 0.4;
-params.p = proportion_asymp;
-fixed_r = 0.14;
-params.fixed_r = fixed_r;
 
 if which_multiplier==1
     
@@ -53,58 +40,16 @@ if which_multiplier==1
     % decay rates, days^-1
     gamma_a=1/6; gamma_s=1/5;
     
-    
-    % set betas s.t. R0,a=R0,s are the same and r=0.14
-    k_relR0 = 1;
-    beta_a_init = 0.4835; % beta_s = (beta_a_init/gamma_a)*gamma_s;
-    
-    x0=beta_a_init;
-    
-    params.k_relR0 = k_relR0;
-    params.beta_a = beta_a_init;
-    %     params.beta_s = beta_s_init;
-    params.gamma_a = gamma_a;
-    params.gamma_s = gamma_s;
-    params.gamma_e = gamma_e;
-    
-    % parameters
-    gamma_e=1/3; % 3 day exposure period
-    
-    % 200 days is about 6-7 months
-    t_start = 0; t_end = t_end_burnin; % burn in time
-    
-    dt=0.01;
-    params.dt=dt;
-    params.t_span = t_start:dt:t_end;
-    
-    % p is the proportion of asymptomatic incidence
-    proportion_asymp = 0.4;
-    params.p = proportion_asymp;
-    
-    fprintf('finding minimum wrt transmission rates... \n\n');
-    
-    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
-    
-    beta_a = x_soln(1);
-    beta_s = k_relR0*(beta_a/gamma_a)*gamma_s; % same R0s
-    
-    fprintf('beta_a =  %2.5f \n\n',beta_a);
-    fprintf('beta_s =  %2.5f \n\n',beta_s);
-    
-    
-    bestfit_SSE = f_val;
-    fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
-    
-    results.bestfit_SSE=bestfit_SSE;
-    
+    % set betas s.t. R0,s=R0,a are the same and r=0.14
+    beta_a = 0.4154; beta_s = (beta_a/gamma_a)*gamma_s; %0.4970;
     
     % burnin time depends on parameters
-    t_end_burnin = 71.86;
+    t_end_burnin = 71.85;
     
     if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_110922_T5and6.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6.mat';
     else
-        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_110922_T5and6_mit.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_sameR0s_011722_T5and6_mit.mat';
     end
     
 elseif which_multiplier==2
@@ -115,139 +60,56 @@ elseif which_multiplier==2
     gamma_a=1/6; gamma_s=1/5;
     
     % set betas s.t. R0,s=2*R0,a are the same and r=0.14
-    k_relR0 = 2;
-    beta_a_init = 0.1985; % beta_s = k_relR0*(beta_a/gamma_a)*gamma_s;
-    
-    x0=beta_a_init;
-    
-    params.k_relR0 = k_relR0;
-    params.beta_a = beta_a_init;
-    %     params.beta_s = beta_s_init;
-    params.gamma_a = gamma_a;
-    params.gamma_s = gamma_s;
-    params.gamma_e = gamma_e;
-    
-    
-    fprintf('finding minimum wrt transmission rates... \n\n');
-    
-    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
-    
-    beta_a = x_soln(1);
-    beta_s = k_relR0*(beta_a/gamma_a)*gamma_s; % same R0s
-    
-    fprintf('beta_a =  %2.5f \n\n',beta_a);
-    fprintf('beta_s =  %2.5f \n\n',beta_s);
-    
-    
-    bestfit_SSE = f_val;
-    fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
-    
-    results.bestfit_SSE=bestfit_SSE;
-    
+    beta_a = 0.2565; beta_s = 2*(beta_a/gamma_a)*gamma_s;
     
     % burnin time depends on parameters
-    t_end_burnin = 71.79;
+    t_end_burnin = 71.91;
     
     
     if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_110922_T5and6.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_102622_T5and6.mat';
     else
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_110922_T5and6_mit.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs2timesRa_102622_T5and6_mit.mat';
     end
     
-elseif which_multiplier==3
     
-    cbf_colors = cbf_colors_vector(2,:);
-    
-    % decay rates, days^-1
-    gamma_a=1/6; gamma_s=1/5;
-    
-    % set betas s.t. R0,s=3*R0,a are the same and r=0.14
-    k_relR0 = 3;
-    beta_a_init = 0.1425; % beta_s = k_relR0*(beta_a/gamma_a)*gamma_s;
-    
-    x0=beta_a_init;
-    
-    params.k_relR0 = k_relR0;
-    params.beta_a = beta_a_init;
-    %     params.beta_s = beta_s_init;
-    params.gamma_a = gamma_a;
-    params.gamma_s = gamma_s;
-    params.gamma_e = gamma_e;
-    
-    
-    fprintf('finding minimum wrt transmission rates... \n\n');
-    
-    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
-    
-    beta_a = x_soln(1);
-    beta_s = k_relR0*(beta_a/gamma_a)*gamma_s; % same R0s
-    
-    fprintf('beta_a =  %2.5f \n\n',beta_a);
-    fprintf('beta_s =  %2.5f \n\n',beta_s);
-    
-    
-    bestfit_SSE = f_val;
-    fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
-    
-    results.bestfit_SSE=bestfit_SSE;
-    
-    
-    % burnin time depends on parameters
-    t_end_burnin = 71.63;
-    
-    
-    if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_110922_T5and6.mat';
-    else
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_110922_T5and6_mit.mat';
-    end
-    
-else
+    elseif which_multiplier==3
     
     cbf_colors = cbf_colors_vector(3,:);
     
     % decay rates, days^-1
     gamma_a=1/6; gamma_s=1/5;
     
-    % set betas s.t. R0,a=4*R0,s are the same and r=0.14
-    k_relR0 = 4;
-    beta_a_init = 0.111; % beta_s = k_relR0*(beta_a/gamma_a)*gamma_s;
-    
-    x0=beta_a_init;
-    
-    params.k_relR0 = k_relR0;
-    params.beta_a = beta_a_init;
-    %     params.beta_s = beta_s_init;
-    params.gamma_a = gamma_a;
-    params.gamma_s = gamma_s;
-    params.gamma_e = gamma_e;
-    
-    
-    fprintf('finding minimum wrt transmission rates... \n\n');
-    
-    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
-    
-    beta_a = x_soln(1);
-    beta_s = k_relR0*(beta_a/gamma_a)*gamma_s; % same R0s
-    
-    fprintf('beta_a =  %2.5f \n\n',beta_a);
-    fprintf('beta_s =  %2.5f \n\n',beta_s);
-    
-    
-    bestfit_SSE = f_val;
-    fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
-    
-    results.bestfit_SSE=bestfit_SSE;
-    
+    % set betas s.t. R0,s=3*R0,a are the same and r=0.14
+    beta_a = 0.1855; beta_s = 3*(beta_a/gamma_a)*gamma_s;
     
     % burnin time depends on parameters
-    t_end_burnin = 72.02;
+    t_end_burnin = 71.96;
+    
     
     if with_mitigation==0
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_110922_T5and6.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_102622_T5and6.mat';
     else
-        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_110922_T5and6_mit.mat';
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs3timesRa_102622_T5and6_mit.mat';
+    end
+    
+else
+    
+    cbf_colors = cbf_colors_vector(4,:);
+    
+    % decay rates, days^-1
+    gamma_a=1/6; gamma_s=1/5;
+    
+    % set betas s.t. R0,a=4*R0,s are the same and r=0.14
+    beta_a = 0.1453; beta_s = 4*(beta_a/gamma_a)*gamma_s;
+    
+    % burnin time depends on parameters
+    t_end_burnin = 71.97;
+    
+    if with_mitigation==0
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_102622_T5and6.mat';
+    else
+        filename = 'SEIR_fixedpropasymp_twodiseases_Rs4timesRa_102622_T5and6_mit.mat';
     end
     
 end
@@ -256,6 +118,7 @@ end
 
 
 %% mitigation on or off
+
 if with_mitigation==1
     
     % matching final R_t for each time scale
@@ -350,7 +213,6 @@ init_conds = transpose(y_traj_burnin(end,:));
 
 Rt_fixedpropasymp = get_Rt_SEIR_twodiseases_fixedpropasymp(params,y_traj);
 results.Rt_fixedpropasymp=Rt_fixedpropasymp;
-% Rt_fixedpropasymp(end)
 
 S_traj = y_traj(:,1);
 E_a_traj = y_traj(:,2); E_s_traj = y_traj(:,3);
