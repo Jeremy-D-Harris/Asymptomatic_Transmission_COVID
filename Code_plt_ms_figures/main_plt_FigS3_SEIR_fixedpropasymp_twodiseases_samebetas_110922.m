@@ -6,7 +6,7 @@
 clear all; close all; clc;
 
 %% save figure?
-save_ans_Fig = 1;
+save_ans_Fig = 0;
 % 0: don't save
 % 1: save
 
