@@ -10,70 +10,101 @@ save_ans = 1;
 % 0: don't save
 % 1: save
 
+%% set up colors and parameters
+cbf_colors_gray = [0.5 0.5 0.5];
+cbf_colors_black = [0 0 0];
+cbf_colors_vector = [cbf_colors_black;cbf_colors_gray];
+
+% number of points in Ta/Ts vector; num points = 2*n_pts - 1;
+n_pts = 20;
 
 %% which set of time scales?
-% which_timescales = 3; % 1,2,3
-% 1: same time scales: Ta=Ts=5 days
-% 2: longer time scales of asymptomatic transmission: Ta=6,Ts=5 days
-% 3: even longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
+relR0 = 4;
+params.relR0 = relR0;
+% 1: Rs = Ra
+% 4: Rs = 4*Ra
+
+if relR0 == 1
+
+filename = 'SEIR_assortmixing_twodiseases_sameR0s_varyTa_113022_refine.mat';
+cbf_colors = cbf_colors_vector(1,:);
+
+else
+    
+filename = 'SEIR_assortmixing_twodiseases_Rs4timesRa_varyTa_113022_refine.mat';
+cbf_colors = cbf_colors_vector(2,:);
+
+end
+    
 
 
-filename = 'SEIR_fixedpropasymp_twodiseases_Ta8_varyrelR0_smooth_110122.mat';
-
-
-%% set up colors and parameters
-cbf_colors_db = [15,32,128]/255; % dark blue - same time scales
-cbf_colors_v = [169,90,161]/255; % violet - longer time scale of asymptomatic
-cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asymptomatc
-
-cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
-
-cbf_colors = cbf_colors_vector(3,:);
-
-%% infectious period, decay rates, days^-1
-gamma_a=1/8; gamma_s=1/5;
-
-%% now vary over the ratio R0,s/R0,a
-
-% inital conditions to findint betas such that r=0.14
-beta_a_init = 0.3275; beta_s_init = (beta_a_init/gamma_a)*gamma_s; % k = 1 to start, i.e. R0,s/R,a=1
-
-% burnin time depends on parameters
-t_end_burnin = 71.87;
+%% burnin time depends on parameters
+t_end_burnin = 71.77;
 
 % parameters
 gamma_e=1/3; % 3 day exposure period
 
 % params.beta_a = beta_a_init;
 % params.beta_s =beta_s_init;
-params.gamma_a = gamma_a;
-params.gamma_s = gamma_s;
 params.gamma_e = gamma_e;
 
 % p is the proportion of asymptomatic incidence
-proportion_asymp = 0.4;
-params.p = proportion_asymp;
+p_aa = 0.5; p_as = 0.25;
+params.p_aa = p_aa; params.p_as = p_as;
+
+% fixed exponential growth rate
 fixed_r = 0.14;
 params.fixed_r = fixed_r;
 
-k_vector_relR0 = 1:0.1:4;
-params.k_vector_relR0 = k_vector_relR0;
+%% vary relative infectious periods, decay rates, days^-1
+% k_vector_relT_Tavary = linspace(1,8/5,n_pts); % ratio of Ta/Ts - Ts fixed
+% k_vector_relT_Tsvary = linspace(5/8,1,n_pts); % ratio of Ta/Ts - Tas fixed
+k_vector_relT_Tavary = [linspace(1,6/5,n_pts/2),linspace(6/5,8/5,n_pts/2)]; % ratio of Ta/Ts - Ts fixed
+k_vector_relT_Tsvary = [linspace(5/8,5/6,n_pts/2),linspace(5/6,1,n_pts/2)]; % ratio of Ta/Ts - Ts fixed
 
+k_vector_relT = [k_vector_relT_Tsvary(1:(end-1)),k_vector_relT_Tavary];
+% k_vector_relT = [k_vector_relT_Tsvary(1:(end-1)),k_vector_relT_Tavary(2:end)];
+% k_vector_relT = [k_vector_relT_Tsvary,k_vector_relT_Tavary];
+params.k_vector_relT = k_vector_relT;
+
+Ts_vector_fixed=5*ones(size(k_vector_relT_Tavary)); 
+% Ts_vector_fixed=5*ones(size(k_vector_relT_Tavary(2:end))); 
+% Ta_vector_vary=k_vector_relT_Tavary(2:end).*Ts_vector_fixed;
+Ta_vector_vary=k_vector_relT_Tavary.*Ts_vector_fixed;
+
+Ta_vector_fixed=5*ones(size(k_vector_relT_Tsvary(1:(end-1)))); 
+% Ta_vector_fixed=5*ones(size(k_vector_relT_Tsvary)); 
+Ts_vector_vary=Ta_vector_fixed./k_vector_relT_Tsvary(1:(end-1));
+% Ts_vector_vary=Ta_vector_fixed./k_vector_relT_Tsvary;
+
+Ta_vector = [Ta_vector_fixed,Ta_vector_vary];
+Ts_vector = [Ts_vector_vary,Ts_vector_fixed];
+
+% give an initial guess
+beta_a_init = 0.4149; 
+proportion_asymp_init = 1/3; % equal to the intrinsic when Ra = Rs, Ta = Ts
 
 %% next fit beta_a to little r
-for count=1:length(k_vector_relR0)
+for count=1:length(k_vector_relT)
     
+    % gammas from infectious periods: Ts=5, Ta=5,...,8
+    gamma_a = 1/Ta_vector(count); gamma_s = 1/Ts_vector(count);
+    params.gamma_a = gamma_a;
+    params.gamma_s = gamma_s;
+    
+    %% inital conditions to findint betas such that r=0.14
     x0=beta_a_init;
-    
-    this_k_relR0 = k_vector_relR0(count);
-    params.k_relR0 = this_k_relR0;
+    beta_s_init = relR0*(beta_a_init/gamma_a)*gamma_s; 
     
     fprintf('finding minimum wrt transmission rates... \n\n');
+    fprintf('count = %d \n\n',count);
+    fprintf('Ta/Ts = %2.4f \n\n',k_vector_relT(count));
     
-    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
+    options = optimset('TolFun',10^-14,'TolX',10^-14);
+    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function_general(x,params),x0,options);
     
     beta_a = x_soln(1);
-    beta_s = this_k_relR0*(beta_a/gamma_a)*gamma_s;
+    beta_s = relR0*(beta_a/gamma_a)*gamma_s;
     
     % initialize for next point
     beta_a_init = beta_a;
@@ -90,31 +121,70 @@ for count=1:length(k_vector_relR0)
     bestfit_SSE = f_val;
     fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
     
-    results.bestfit_SSE=bestfit_SSE;
+    results.bestfit_SSE_betas=bestfit_SSE;
     
     % need to get eigen proportion direction
-    eigen_direction_fixedpropasymp = get_eigendirection_SEIR_twodiseases_fixedpropasymp(params);
+    eigen_direction_assortmixing = get_eigendirection_SEIR_twodiseases_assortmixing(params);
     
-    R0_fixedpropasymp = get_R0_SEIR_twodiseases_fixedpropasymp(params);
+    R0_assortmixing = get_R0_SEIR_twodiseases_assortmixing(params);
     
+    %% need to find the corresponding intrinsic proportion, p, to find z
     % calculate the intrinsic proportion of asymptomatic transmission
+    if k_vector_relT(count)==1
+        
+    proportion_asymp = 2/3;
+    params.p = proportion_asymp;
+    
+    % initialize for next point
+    proportion_asymp_init = proportion_asymp;
+    
+    fprintf('proportion asymptomatic =  %2.4f \n\n',proportion_asymp);
+    
+    
+    else
+    x0=proportion_asymp_init;
+    
+    fprintf('finding minimum wrt p... \n\n');
+    
+    options = optimset('TolFun',10^-14,'TolX',10^-14);
+    [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function_propasymp(x,params),x0,options);
+    
+    proportion_asymp = x_soln(1);
+    params.p = proportion_asymp;
+    
+    % initialize for next point
+    proportion_asymp_init = proportion_asymp;
+    
+    fprintf('proportion asymptomatic =  %2.4f \n\n',proportion_asymp);
+    
+    bestfit_SSE = f_val;
+    fprintf('best fit SSE =  %1.2e \n\n',bestfit_SSE);
+    
+    results.bestfit_SSE_p=bestfit_SSE;
+    
+    end
+    
+    %% now calculate intrinsic proportion asymp transmission
+%     total_transmission_z = p_aa*beta_a/gamma_a+(1-p_aa)*beta_s/gamma_s+p_as*beta_a/gamma_a+(1-p_as)*beta_s/gamma_s;
+%     asymp_transmission_z = p_aa*beta_a/gamma_a+p_as*beta_s/gamma_s;
     total_transmission_z = proportion_asymp*beta_a/gamma_a+(1-proportion_asymp)*beta_s/gamma_s;
     asymp_transmission_z = proportion_asymp*beta_a/gamma_a;
+    
     proportion_asymp_transmission_z = asymp_transmission_z/total_transmission_z;
     results.proportion_asymp_transmission_z=proportion_asymp_transmission_z;
     
     % calculate the realized proportion of asymptomatic transmission
-    total_transmission_q = beta_a*eigen_direction_fixedpropasymp(4)+beta_s*eigen_direction_fixedpropasymp(5);
-    asymp_transmission_q = beta_a*eigen_direction_fixedpropasymp(4);
+    total_transmission_q = beta_a*eigen_direction_assortmixing(4)+beta_s*eigen_direction_assortmixing(5);
+    asymp_transmission_q = beta_a*eigen_direction_assortmixing(4);
     proportion_asymp_transmission_q = asymp_transmission_q/total_transmission_q;
     results.proportion_asymp_transmission_q=proportion_asymp_transmission_q;
     
     fprintf('Basic reproductive number \n');
-    fprintf('R_0 =  %2.4f \n\n',R0_fixedpropasymp);
+    fprintf('R_0 =  %2.4f \n\n',R0_assortmixing);
     
-    r_fixedpropasymp = get_r_SEIR_twodiseases_fixedpropasymp(params);
+    r_assortmixing = get_r_SEIR_twodiseases_assortmixing(params);
     fprintf('Exponential growth rate \n');
-    fprintf('r =  %2.4f \n\n',r_fixedpropasymp);
+    fprintf('r =  %2.4f \n\n',r_assortmixing);
     
     
     %% now simulate the two disease SEIR model
@@ -124,7 +194,7 @@ for count=1:length(k_vector_relR0)
     params.t_m1 = 70;
     params.t_min = 30;
     params.t_m2 = params.t_m1+params.t_min;
-    params.mitigation_level = 1;
+    params.mitigation_level = 1; % 1 = unmitigated
     
     % 200 days is about 6-7 months
     t_start = 0; t_end = t_end_burnin; % burn in time
@@ -135,15 +205,15 @@ for count=1:length(k_vector_relR0)
     
     
     perturb = 1e-11;
-    if eigen_direction_fixedpropasymp(1)<0
-        init_conds = [1;0;0;0;0;0;0] + perturb*eigen_direction_fixedpropasymp;
+    if eigen_direction_assortmixing(1)<0
+        init_conds = [1;0;0;0;0;0;0] + perturb*eigen_direction_assortmixing;
     else
-        init_conds = [1;0;0;0;0;0;0] - perturb*eigen_direction_fixedpropasymp;
+        init_conds = [1;0;0;0;0;0;0] - perturb*eigen_direction_assortmixing;
     end
     
     options = odeset('RelTol',1e-10,'AbsTol',1e-12);
     
-    [t,y_traj_burnin] = ode45(@(t,y)simulate_SEIR_twodiseases_fixedpropasymp(t,y,params), params.t_span, init_conds,options);
+    [t,y_traj_burnin] = ode45(@(t,y)simulate_SEIR_twodiseases_assortmixing(t,y,params), params.t_span, init_conds,options);
     
     t_start = 0; t_end = 250;
     
@@ -151,10 +221,10 @@ for count=1:length(k_vector_relR0)
     
     init_conds = transpose(y_traj_burnin(end,:));
     
-    [t,y_traj] = ode45(@(t,y)simulate_SEIR_twodiseases_fixedpropasymp_mitigation(t,y,params), params.t_span, init_conds,options);
+    [t,y_traj] = ode45(@(t,y)simulate_SEIR_twodiseases_assortmixing_mitigation(t,y,params), params.t_span, init_conds,options);
     
-    this_Rt_fixedpropasymp = get_Rt_SEIR_twodiseases_fixedpropasymp(params,y_traj);
-    results.Rt_fixedpropasymp=this_Rt_fixedpropasymp;
+    this_Rt_assortmixing = get_Rt_SEIR_twodiseases_assortmixing(params,y_traj);
+    results.Rt_assortmixing=this_Rt_assortmixing;
     
     S_traj = y_traj(:,1);
     E_a_traj = y_traj(:,2); E_s_traj = y_traj(:,3);
@@ -173,7 +243,7 @@ for count=1:length(k_vector_relR0)
     
     % calculate the proportion of asymptomatic incidence
     this_total_incidence = beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj);
-    this_asymp_incidence = proportion_asymp*(beta_a_traj.*(I_a_traj.*S_traj)+beta_s_traj.*(I_s_traj.*S_traj));
+    this_asymp_incidence = p_aa*(beta_a_traj.*(I_a_traj.*S_traj)+p_as*beta_s_traj.*(I_s_traj.*S_traj));
     this_proportion_asymp_incidence = this_asymp_incidence./this_total_incidence;
     
     results.total_incidence=this_total_incidence;
@@ -202,16 +272,13 @@ for count=1:length(k_vector_relR0)
     results_collect(count) = results;
     
     %% plot figure
+    if 1
     f1 = figure(1); set(f1, 'Position', [400 250 450 850]);
     
     subplot(4,1,1);
-    % q = semilogy(params.t_span, results.I_tot,'Color',cbf_colors,'LineWidth',2); hold on;
-%     this_h(count) = semilogy(params.t_span, this_total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-%     this_h(count).Color(4) = 1-0.12*(count);
-    this_h(count) = semilogy(params.t_span, this_total_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-%     this_transparency = 
-    increment = 1/(1+length(k_vector_relR0));
-    this_h(count).Color(4) = 1-increment*count;
+    this_h(count) = semilogy(params.t_span, this_total_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+%     increment = 1/(1+length(relR0));
+%     this_h(count).Color(4) = 1-increment*count;
     
     axis([0 params.t_span(end) 10^(-6) 1]);
     xlabel('Time (days)'); ylabel({'Total'; 'incidence'});
@@ -230,8 +297,8 @@ for count=1:length(k_vector_relR0)
     
     
     figure(1); subplot(4,1,2);
-    this_p = plot(params.t_span, this_proportion_asymp_transmission,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-increment*count;
+    this_p = plot(params.t_span, this_proportion_asymp_transmission,'--','Color',cbf_colors,'LineWidth',2); hold on;
+%     this_p.Color(4) = 1-increment*count;
     
     % r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
     axis([0 params.t_span(end) 0 1]);
@@ -243,8 +310,8 @@ for count=1:length(k_vector_relR0)
     
     
     figure(1); subplot(4,1,3);
-    this_p = plot(params.t_span, this_proportion_asymp_incidence,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-increment*count;
+    this_p = plot(params.t_span, this_proportion_asymp_incidence,'--','Color',cbf_colors,'LineWidth',2); hold on;
+%     this_p.Color(4) = 1-increment*count;
     % r(2) = plot(params.t_span, proportion_asymp*ones(size(params.t_span)),'k--','LineWidth',2); hold on;
     axis([0 params.t_span(end) 0 1]);
     xlabel('Time (days)'); ylabel({'Proportion'; 'asymptomatic'; 'incidence'});
@@ -255,14 +322,17 @@ for count=1:length(k_vector_relR0)
     
     
     figure(1); subplot(4,1,4);
-    this_p = semilogy(params.t_span,this_Rt_fixedpropasymp,'Color',cbf_colors,'LineWidth',2); hold on;
-    this_p.Color(4) = 1-increment*count;
+    this_p = semilogy(params.t_span,this_Rt_assortmixing,'--','Color',cbf_colors,'LineWidth',2); hold on;
+%     this_p.Color(4) = 1-increment*count;
     axis([0 params.t_span(end) 10^-1 10^1]);
     xlabel('Time (days)'); ylabel({'Effective'; 'reproduction'; 'number'});
     f1=gca;
     f1.LineWidth = 1;
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
+    
+    end
+    
     
 end
 

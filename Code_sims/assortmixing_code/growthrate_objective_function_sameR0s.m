@@ -1,7 +1,7 @@
 function f = growthrate_objective_function_sameR0s(x,params)
 
 params.beta_a = x;
-params.beta_s = (params.beta_a/params.gamma_a)*params.gamma_s;
+params.beta_s = params.relR0*(params.beta_a/params.gamma_a)*params.gamma_s;
 
 curr_r_fixedpropasymp = get_r_SEIR_twodiseases_assortmixing(params);
 

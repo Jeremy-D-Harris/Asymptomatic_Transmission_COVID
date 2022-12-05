@@ -6,7 +6,7 @@ clear all; close all; clc;
 
 
 %% want to save?
-save_ans = 1;
+save_ans = 0;
 % 0: don't save
 % 1: save
 
@@ -17,7 +17,8 @@ save_ans = 1;
 % 2: longer time scales of asymptomatic transmission: Ta=6,Ts=5 days
 % 3: even longer time scales of asymptomatic transmission: Ta=8,Ts=5 days
 
-filename = 'SEIR_fixedpropasymp_twodiseases_Ta6_varyrelR0_smooth_110122.mat';
+
+filename = 'SEIR_fixedpropasymp_twodiseases_Ta8_varyrelR0_smooth_110122.mat';
 
 
 %% set up colors and parameters
@@ -27,18 +28,18 @@ cbf_colors_lb = [133,192,249]/255; % light blue - even longer time scale of asym
 
 cbf_colors_vector = [cbf_colors_db;cbf_colors_v;cbf_colors_lb];
 
-cbf_colors = cbf_colors_vector(2,:);
+cbf_colors = cbf_colors_vector(3,:);
 
 %% infectious period, decay rates, days^-1
-gamma_a=1/6; gamma_s=1/5;
+gamma_a=1/8; gamma_s=1/5;
 
 %% now vary over the ratio R0,s/R0,a
 
 % inital conditions to findint betas such that r=0.14
-beta_a_init = 0.4149; beta_s_init = (beta_a_init/gamma_a)*gamma_s; % k = 1 to start, i.e. R0,s/R,a=1
+beta_a_init = 0.3275; beta_s_init = (beta_a_init/gamma_a)*gamma_s; % k = 1 to start, i.e. R0,s/R,a=1
 
 % burnin time depends on parameters
-t_end_burnin = 72.02;
+t_end_burnin = 71.87;
 
 % parameters
 gamma_e=1/3; % 3 day exposure period
@@ -55,7 +56,6 @@ params.p = proportion_asymp;
 fixed_r = 0.14;
 params.fixed_r = fixed_r;
 
-% k_vector_relR0 = 0.5:0.5:4;
 k_vector_relR0 = 1:0.1:4;
 params.k_vector_relR0 = k_vector_relR0;
 
@@ -63,15 +63,12 @@ params.k_vector_relR0 = k_vector_relR0;
 %% next fit beta_a to little r
 for count=1:length(k_vector_relR0)
     
-    
-    
     x0=beta_a_init;
     
     this_k_relR0 = k_vector_relR0(count);
     params.k_relR0 = this_k_relR0;
     
     fprintf('finding minimum wrt transmission rates... \n\n');
-    fprintf('count = ',count);
     
     [x_soln,f_val] = fminsearch(@(x)growthrate_objective_function(x,params),x0);
     
@@ -266,7 +263,6 @@ for count=1:length(k_vector_relR0)
     f1.LineWidth = 1;
     f1.FontSize = 14;
     f1.FontWeight = 'normal';
-    
     
 end
 
