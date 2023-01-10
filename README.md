@@ -1,5 +1,5 @@
 # How time-scale differences in asymptomatic and symptomatic transmission shape SARS-CoV-2 outbreak dynamics
-Jeremy Harris and Sang Woo Park and collaborators, April 2022
+Jeremy Harris, Sang Woo Park, Jonathan Dushoff, Joshua S. Weitz, April 2022
 
  -- updated 04/21/22 by jdh --
 
